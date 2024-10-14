@@ -1,27 +1,56 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using System;
+using Unity.Mathematics;
+using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : MonoBehaviour, IPlayerComponent
 {
-    [Header("Setting")]
+    [Header("Setting")] 
     [SerializeField] private float speed;
-    [SerializeField] private float gravity = -9.8f;
+    
+    [Header("JumpSetting")]
+    [SerializeField] private Transform groundCheck;
+    [SerializeField] private Vector3 groundCheckerSize;
+    [SerializeField] private LayerMask whatIsGround;
     [SerializeField] private float jumpForce = 3f;
     
-    private CharacterController _charController;
+    public bool IsCanMove { get; set; }
+    
+    private Rigidbody _rigid;
     private Vector3 _playerVelocity;
-    private bool isGround;
+    private bool _isGround;
+    
+    private Player _player;
 
-    private void Awake()
+    public void Initialize(Player player)
     {
-        _charController = GetComponent<CharacterController>();
+        _player = player;
+        _rigid = GetComponent<Rigidbody>();
+        IsCanMove = true;
+
+        _player.InputCompo.OnJumpEvent += Jump;
     }
 
-    private void Update()
+    private void OnDisable()
     {
-        isGround = _charController.isGrounded;
+        _player.InputCompo.OnJumpEvent -= Jump;
+        
+    }
+
+    private void FixedUpdate()
+    {
+        _isGround = IsGroundChecker();
+
+        if (IsCanMove)
+        {
+            SetMovement(_player.InputCompo.MovementDir);
+            _rigid.velocity = _playerVelocity;
+        }
+    }
+
+    public bool IsGroundChecker()
+    {
+        Collider[] colliders = Physics.OverlapBox(groundCheck.position,groundCheckerSize, groundCheck.rotation,whatIsGround);
+        return colliders.Length > 0;
     }
 
     public void SetMovement(Vector2 input)
@@ -29,18 +58,28 @@ public class PlayerMovement : MonoBehaviour
         Vector3 moveDir = Vector3.zero;
         moveDir.x = input.x;
         moveDir.z = input.y;
+        Vector3 dir = transform.TransformDirection(moveDir) * speed;
         
-        _charController.Move(transform.TransformDirection(moveDir) * speed * Time.deltaTime);
-        
-        _playerVelocity.y += gravity * Time.deltaTime;
-        if (isGround && _playerVelocity.y < 0)
-            _playerVelocity.y = -2f;
-        _charController.Move(_playerVelocity * Time.deltaTime);
+        _playerVelocity = new Vector3(dir.x, _rigid.velocity.y, dir.z);
     }
 
     public void Jump()
     {
-        if (isGround)
-            _playerVelocity.y = Mathf.Sqrt(jumpForce * -3.0f * gravity);
+        if (_isGround && _playerVelocity.y <= 0)
+            _rigid.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
     }
+
+#if UNITY_EDITOR
+
+    private void OnDrawGizmosSelected()
+    {
+        if (groundCheck != null)
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireCube(groundCheck.position, groundCheckerSize);
+            Gizmos.color = Color.white;
+        }
+    }
+
+#endif
 }

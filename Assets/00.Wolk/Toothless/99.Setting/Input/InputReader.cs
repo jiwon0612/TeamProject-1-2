@@ -3,9 +3,10 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [CreateAssetMenu(menuName = "SO/InputReader")]
-public class InputReader : ScriptableObject, Console.IPlayerActions
+public class InputReader : ScriptableObject, Console.IPlayerActions, IPlayerComponent
 {
     private Console _console;
+    private Player _player;
 
     public Vector2 MovementDir { get; private set; }
     public event Action OnJumpEvent;
@@ -37,5 +38,10 @@ public class InputReader : ScriptableObject, Console.IPlayerActions
     public void OnLook(InputAction.CallbackContext context)
     {
         MouseDir = context.ReadValue<Vector2>();
+    }
+
+    public void Initialize(Player player)
+    {
+        _player = player;
     }
 }

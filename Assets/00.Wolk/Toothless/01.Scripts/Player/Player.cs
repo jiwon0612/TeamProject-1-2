@@ -2,36 +2,34 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Linq;
+using UnityEngine.Serialization;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] private InputReader inputReader;
-    private PlayerMovement _playerMoveComp;
-    private PlayerLook _playerLook;
+    [field : SerializeField] public InputReader InputCompo { get; private set; }
+
+    public Dictionary<Type, IPlayerComponent> _components;
 
     private void Awake()
     {
-        _playerMoveComp = GetComponent<PlayerMovement>();
-        _playerLook = GetComponent<PlayerLook>();
-        
-        inputReader.OnJumpEvent += _playerMoveComp.Jump;
+        _components = new Dictionary<Type, IPlayerComponent>();
 
+        GetComponentsInChildren<IPlayerComponent>().ToList().ForEach(x => _components.Add(x.GetType(), x));
+
+        _components.Add(InputCompo.GetType(), InputCompo);
+
+        _components.Values.ToList().ForEach(x => x.Initialize(this));
     }
 
-    private void OnDisable()
+    public T GetComp<T>() where T : class
     {
-        inputReader.OnJumpEvent -= _playerMoveComp.Jump;
-        
+        Type type = typeof(T);
+        if (_components.TryGetValue(type, out IPlayerComponent compo))
+        {
+            return compo as T;
+        }
+        return default;
     }
 
-    private void FixedUpdate()
-    {
-        _playerMoveComp.SetMovement(inputReader.MovementDir);
-
-    }
-
-    private void LateUpdate()
-    {
-        _playerLook.SetPlayerLook(inputReader.MouseDir);
-    }
 }
