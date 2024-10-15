@@ -9,8 +9,9 @@ public class InputReader : ScriptableObject, Console.IPlayerActions, IPlayerComp
     private Player _player;
 
     public Vector2 MovementDir { get; private set; }
-    public event Action OnJumpEvent;
     public Vector2 MouseDir { get; private set; }
+    public event Action OnJumpEvent;
+    public event Action<bool> OnShootEvent;
 
     private void OnEnable()
     {
@@ -21,6 +22,11 @@ public class InputReader : ScriptableObject, Console.IPlayerActions, IPlayerComp
         }
 
         _console.Enable();
+    }
+    
+    public void Initialize(Player player)
+    {
+        _player = player;
     }
 
     public void OnMove(InputAction.CallbackContext context)
@@ -40,8 +46,13 @@ public class InputReader : ScriptableObject, Console.IPlayerActions, IPlayerComp
         MouseDir = context.ReadValue<Vector2>();
     }
 
-    public void Initialize(Player player)
+    public void OnShoot(InputAction.CallbackContext context)
     {
-        _player = player;
+        if (context.performed)
+            OnShootEvent?.Invoke(true);
+        if (context.canceled)
+            OnShootEvent?.Invoke(false);
     }
+
+    
 }
