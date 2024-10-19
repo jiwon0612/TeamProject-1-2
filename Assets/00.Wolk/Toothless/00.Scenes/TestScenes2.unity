@@ -1433,8 +1433,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6d8a044d28915e458af875115adc522, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
+  moveSpeed: 5
+  swhingSpeed: 9
   groundCheck: {fileID: 783736835}
+  horizontalForce: 259
+  forwardForce: 500
+  extendCableSpeed: 20
   groundCheckerSize: {x: 0.75, y: 0.2, z: 0.75}
   whatIsGround:
     serializedVersion: 2
@@ -1454,7 +1458,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <InputCompo>k__BackingField: {fileID: 11400000, guid: d70af46085b134c4abd5d8cd08e3d2fa,
     type: 2}
-  CurrentState: 
 --- !u!1 &1740281770
 GameObject:
   m_ObjectHideFlags: 0

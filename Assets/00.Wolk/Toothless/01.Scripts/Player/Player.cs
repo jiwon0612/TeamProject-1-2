@@ -18,9 +18,9 @@ public class Player : MonoBehaviour
 
     public Dictionary<Type, IPlayerComponent> _components;
     
-    public PlayerStateMachine StateMachine { get; private set; }
-
-    public string CurrentState;
+    // public PlayerStateMachine StateMachine { get; private set; }
+    //
+    // public string CurrentState;
 
     private void Awake()
     {
@@ -29,22 +29,29 @@ public class Player : MonoBehaviour
         _components.Add(InputCompo.GetType(), InputCompo);
         _components.Values.ToList().ForEach(x => x.Initialize(this));
         
-        StateMachine = new PlayerStateMachine();
+        // StateMachine = new PlayerStateMachine();
+        //
+        // foreach (PlayerStateType item in Enum.GetValues(typeof(PlayerStateType)))
+        // {
+        //     string enumName = item.ToString();
+        //     Type t = Type.GetType($"Player{enumName}State");
+        //     if (t != null)
+        //     {
+        //         var state = Activator.CreateInstance(t, this , StateMachine) as PlayerState;
+        //         StateMachine.AddState(state, item);
+        //     }
+        //     else
+        //         Debug.LogWarning($"없어 Player{enumName}State");
+        // }
+        //
+        // StateMachine.Initialize(PlayerStateType.Idle);
 
-        foreach (PlayerStateType item in Enum.GetValues(typeof(PlayerStateType)))
-        {
-            string enumName = item.ToString();
-            Type t = Type.GetType($"Player{enumName}State");
-            if (t != null)
-            {
-                var state = Activator.CreateInstance(t, this , StateMachine) as PlayerState;
-                StateMachine.AddState(state, item);
-            }
-            else
-                Debug.LogWarning($"없어 Player{enumName}State");
-        }
-        
-        StateMachine.Initialize(PlayerStateType.Idle);
+        GetComp<InputReader>().OnJumpEvent += GetComp<PlayerMovement>().Jump;
+    }
+
+    private void OnDisable()
+    {
+        GetComp<InputReader>().OnJumpEvent -= GetComp<PlayerMovement>().Jump;
     }
 
     public T GetComp<T>() where T : class
@@ -59,7 +66,9 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        CurrentState = StateMachine.CurrentState.ToString();
-        StateMachine.CurrentState.StateUpdate();
+        // CurrentState = StateMachine.CurrentState.ToString();
+        // StateMachine.CurrentState.StateUpdate();
+        
+        GetComp<PlayerMovement>().SetMovement(GetComp<InputReader>().MovementDir);
     }
 }

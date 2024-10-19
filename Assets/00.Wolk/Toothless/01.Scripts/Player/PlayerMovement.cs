@@ -1,12 +1,19 @@
+using BehaviorDesigner.Runtime.Tasks.Unity.UnityCharacterController;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 public class PlayerMovement : MonoBehaviour, IPlayerComponent
 {
     [Header("Setting")] 
-    [SerializeField] private float speed;
+    [SerializeField] private float moveSpeed;
+    [SerializeField] private float swhingSpeed;
+    [SerializeField] private float airSpeed;
+    
+    private float _speed;
 
-    [Header("JumpSetting")] [SerializeField]
-    private Transform groundCheck;
+    [Header("JumpSetting")] 
+    [SerializeField] private Transform groundCheck;
 
     [SerializeField] private Vector3 groundCheckerSize;
     [SerializeField] private LayerMask whatIsGround;
@@ -19,6 +26,7 @@ public class PlayerMovement : MonoBehaviour, IPlayerComponent
     private Vector3 _playerVelocity;
 
     private Player _player;
+    private RopeAction _rope;
 
     public void Initialize(Player player)
     {
@@ -26,14 +34,31 @@ public class PlayerMovement : MonoBehaviour, IPlayerComponent
         RigidCompo = GetComponent<Rigidbody>();
         isGround = new NotifyValue<bool>();
         IsCanMove = false;
+        _rope = player.GetComp<RopeAction>();
+        _speed = moveSpeed;
     }
 
     private void FixedUpdate()
     {
         IsGroundChecker();
 
-        if (!IsCanMove)
+        CheckIsSwhing();
+        
+        SetMovement(_player.GetComp<InputReader>().MovementDir);
+
+        if (!IsCanMove && !_rope.IsSwhinging && isGround.Value)
             RigidCompo.velocity = _playerVelocity;
+        
+        // if (!isGround.Value)
+        //     SetInAirMovement(_player.GetComp<InputReader>().MovementDir);
+    }
+
+    private void CheckIsSwhing()
+    {
+        if (_rope.IsSwhinging)
+            _speed = swhingSpeed;
+        else
+            _speed = moveSpeed;
     }
 
     public void IsGroundChecker()
@@ -50,14 +75,25 @@ public class PlayerMovement : MonoBehaviour, IPlayerComponent
         Vector3 moveDir = Vector3.zero;
         moveDir.x = input.x;
         moveDir.z = input.y;
-        Vector3 dir = transform.TransformDirection(moveDir) * speed;
+        Vector3 dir = transform.TransformDirection(moveDir) * _speed;
 
         _playerVelocity = new Vector3(dir.x, RigidCompo.velocity.y, dir.z);
     }
+    
+    // public void SetInAirMovement(Vector2 input)
+    // {
+    //     if (input.x > 0) RigidCompo.AddForce(new Vector3(0, airSpeed, 0) * Time.deltaTime);
+    //     if (input.x < 0) RigidCompo.AddForce(new Vector3(0, -airSpeed, 0) * Time.deltaTime);
+    // }
 
     public void StopMove() => _playerVelocity = new Vector3(0, RigidCompo.velocity.y, 0);
 
-    public void Jump() => _player.StateMachine.ChangeState(Player.PlayerStateType.Jump);
+    public void Jump()
+    {
+        if (isGround.Value == false) return;
+        
+        RigidCompo.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);  
+    }
 
 #if UNITY_EDITOR
 
