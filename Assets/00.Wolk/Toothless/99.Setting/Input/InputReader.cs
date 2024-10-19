@@ -3,13 +3,15 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [CreateAssetMenu(menuName = "SO/InputReader")]
-public class InputReader : ScriptableObject, Console.IPlayerActions
+public class InputReader : ScriptableObject, Console.IPlayerActions, IPlayerComponent
 {
     private Console _console;
+    private Player _player;
 
     public Vector2 MovementDir { get; private set; }
-    public event Action OnJumpEvent;
     public Vector2 MouseDir { get; private set; }
+    public event Action OnJumpEvent;
+    public event Action<bool> OnShootEvent;
 
     private void OnEnable()
     {
@@ -20,6 +22,11 @@ public class InputReader : ScriptableObject, Console.IPlayerActions
         }
 
         _console.Enable();
+    }
+    
+    public void Initialize(Player player)
+    {
+        _player = player;
     }
 
     public void OnMove(InputAction.CallbackContext context)
@@ -38,4 +45,14 @@ public class InputReader : ScriptableObject, Console.IPlayerActions
     {
         MouseDir = context.ReadValue<Vector2>();
     }
+
+    public void OnShoot(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+            OnShootEvent?.Invoke(true);
+        if (context.canceled)
+            OnShootEvent?.Invoke(false);
+    }
+
+    
 }
