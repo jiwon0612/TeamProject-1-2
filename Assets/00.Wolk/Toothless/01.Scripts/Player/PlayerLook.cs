@@ -1,6 +1,7 @@
+using System;
 using UnityEngine;
 
-public class PlayerLook : MonoBehaviour
+public class PlayerLook : MonoBehaviour, IPlayerComponent
 {
     [Header("Setting")] 
     [SerializeField] private float xSeneitivity = 30f;
@@ -9,11 +10,14 @@ public class PlayerLook : MonoBehaviour
     private Camera _cam;
     private float xRotation = 0f;
 
-    private void Awake()
+    private Player _player;
+    
+    public void Initialize(Player player)
     {
+        _player = player;
         _cam = Camera.main; 
     }
-
+    
     public void SetPlayerLook(Vector2 input)
     {
         float mouseX = input.x;
@@ -24,5 +28,10 @@ public class PlayerLook : MonoBehaviour
         
         _cam.transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
         transform.Rotate(Vector3.up * (mouseX * Time.deltaTime) * xSeneitivity);
+    }
+
+    private void LateUpdate()
+    {
+        SetPlayerLook(_player.InputCompo.MouseDir);
     }
 }
