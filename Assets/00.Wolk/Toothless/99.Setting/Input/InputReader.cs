@@ -12,6 +12,7 @@ public class InputReader : ScriptableObject, Console.IPlayerActions, IPlayerComp
     public Vector2 MouseDir { get; private set; }
     public event Action OnJumpEvent;
     public event Action<bool> OnShootEvent;
+    public event Action OnAttackEvent;
 
     private void OnEnable()
     {
@@ -54,5 +55,9 @@ public class InputReader : ScriptableObject, Console.IPlayerActions, IPlayerComp
             OnShootEvent?.Invoke(false);
     }
 
-    
+    public void OnAttack(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+            OnAttackEvent?.Invoke();
+    }
 }
