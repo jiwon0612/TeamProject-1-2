@@ -8,8 +8,7 @@ public class Katana : MonoBehaviour
     [SerializeField] private LayerMask _whatIsTarget;
     [SerializeField] private Material _sliceMaterial;
 
-    [SerializeField] private Transform _originPos;
-    [SerializeField] private Transform _bradePos;
+    [SerializeField] private Transform _normalPoint;
 
     private bool _fi = false;
 
@@ -27,13 +26,18 @@ public class Katana : MonoBehaviour
                 
                 Debug.Log(point.normal);
 
-                Vector3 normal = new Vector3(point.normal.y, point.normal.x, point.normal.z);
+                Vector3 normal = (_normalPoint.position - transform.position).normalized;
                 
                 Debug.Log(normal);
                 
-                ObjectCut.Slicer(collision.gameObject,new Vector3(-1,0,0), hitPoint, _sliceMaterial);
+                GameObject[] objects = ObjectCut.Slicer(collision.gameObject,normal, hitPoint, _sliceMaterial);
 
-                Debug.Log("자름");
+                foreach (GameObject obj in objects)
+                {
+                    obj.AddComponent<Rigidbody>();
+                    var objCol = obj.AddComponent<MeshCollider>();
+                    objCol.convex = true;
+                }
             }
         }
     }
