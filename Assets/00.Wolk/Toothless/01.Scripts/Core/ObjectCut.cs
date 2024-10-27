@@ -5,435 +5,184 @@ using System;
 
 public class ObjectCut
 {
-    public static GameObject[] CutObject(GameObject target, Vector3 normal, Vector3 point, Material material)
+    public static GameObject[] Slicer(GameObject _target, Vector3 _sliceNormal, Vector3 _slicePoint,
+        Material _ineterial)
     {
-        Debug.Log($"normal : {normal} point : {point}");
-        Mesh oMesh = target.GetComponent<MeshFilter>().mesh;
-        Vector3[] oVertices = oMesh.vertices;
-        Vector3[] oNormals = oMesh.normals;
-        Vector2[] oUVs = oMesh.uv;
+        Mesh orinMesh = _target.GetComponent<MeshFilter>().sharedMesh;
 
-        //정점들을 두 가지로 나눌 준비
+        Vector3[] orinVerts = orinMesh.vertices;
+        Vector3[] orinNors = orinMesh.normals;
+        Vector2[] orinUvs = orinMesh.uv;
 
-        List<Vector3> sideVertices1 = new List<Vector3>();
-        List<Vector3> sideNormals1 = new List<Vector3>();
-        List<Vector2> sideUVs1 = new List<Vector2>();
-        List<int> sideTris1 = new List<int>();
+        int orinSubMeshCount = orinMesh.subMeshCount;
 
-        List<Vector3> sideVertices2 = new List<Vector3>();
-        List<Vector3> sideNormals2 = new List<Vector3>();
-        List<Vector2> sideUVs2 = new List<Vector2>();
-        List<int> sideTris2 = new List<int>();
+        Material[] orinMaterials = _target.GetComponent<MeshRenderer>().sharedMaterials;
 
-        List<Vector3> newVertices = new List<Vector3>();
-        List<Vector3> newNormals = new List<Vector3>();
-        List<Vector2> newUVs = new List<Vector2>();
-        
-        int triCount = oMesh.triangles.Length / 3;
+        int existInterialMatIdx = -1;
 
-        for (int i = 0; i < triCount; i++)
+        for (int i = 0; i < orinMaterials.Length; i++)
         {
-            //값 저장
-
-            int index0 = i * 3;
-            int index1 = index0 + 1;
-            int index2 = index1 + 1;
-
-            int vertexIdx0 = oMesh.triangles[index0];
-            int vertexIdx1 = oMesh.triangles[index1];
-            int vertexIdx2 = oMesh.triangles[index2];
-
-            Vector3 vertex0 = oMesh.vertices[vertexIdx0];
-            Vector3 vertex1 = oMesh.vertices[vertexIdx1];
-            Vector3 vertex2 = oMesh.vertices[vertexIdx2];
-
-            Vector3 normal0 = oMesh.normals[vertexIdx0];
-            Vector3 normal1 = oMesh.normals[vertexIdx1];
-            Vector3 normal2 = oMesh.normals[vertexIdx2];
-
-            Vector2 uv0 = oMesh.uv[vertexIdx0];
-            Vector2 uv1 = oMesh.uv[vertexIdx1];
-            Vector2 uv2 = oMesh.uv[vertexIdx2];
-
-            // 방향 구하기 위한 내적 값
-            float dot0 = Vector3.Dot(normal, vertex0 - point);
-            float dot1 = Vector3.Dot(normal, vertex1 - point);
-            float dot2 = Vector3.Dot(normal, vertex2 - point);
-
-            if (dot0 < 0 && dot1 < 0 && dot2 < 0) // 절단면의 노멀과 같은 방향
+            if (orinMaterials[i].Equals(_ineterial))
             {
-                sideVertices1.Add(vertex0);
-                sideVertices1.Add(vertex1);
-                sideVertices1.Add(vertex2);
-
-                sideNormals1.Add(normal0);
-                sideNormals1.Add(normal1);
-                sideNormals1.Add(normal2);
-
-                sideUVs1.Add(uv0);
-                sideUVs1.Add(uv1);
-                sideUVs1.Add(uv2);
-
-                sideTris1.Add(sideTris1.Count);
-                sideTris1.Add(sideTris1.Count);
-                sideTris1.Add(sideTris1.Count);
-            }
-            else if (dot0 >= 0 && dot1 >= 0 && dot2 >= 0) // 다른 방향
-            {
-                sideVertices2.Add(vertex0);
-                sideVertices2.Add(vertex1);
-                sideVertices2.Add(vertex2);
-
-                sideNormals2.Add(normal0);
-                sideNormals2.Add(normal1);
-                sideNormals2.Add(normal2);
-
-                sideUVs2.Add(uv0);
-                sideUVs2.Add(uv1);
-                sideUVs2.Add(uv2);
-
-                sideTris2.Add(sideTris2.Count);
-                sideTris2.Add(sideTris2.Count);
-                sideTris2.Add(sideTris2.Count);
-            }
-            else
-            {
-                Debug.Log("dpftmans");
-                int aloneVertexIdx = Mathf.Sign(dot0) == Mathf.Sign(dot1)
-                    ? vertexIdx2
-                    : (Mathf.Sign(dot0) == Mathf.Sign(dot2) ? vertexIdx1 : vertexIdx0);
-                int otherVertexIdx0 = Mathf.Sign(dot0) == Mathf.Sign(dot1)
-                    ? vertexIdx0
-                    : (Mathf.Sign(dot0) == Mathf.Sign(dot2) ? vertexIdx2 : vertexIdx1);
-                int otherVertexidx1 = Mathf.Sign(dot0) == Mathf.Sign(dot1)
-                    ? vertexIdx1
-                    : (Mathf.Sign(dot0) == Mathf.Sign(dot2) ? vertexIdx0 : vertexIdx2);
-
-                Vector3 aloneVertex = oVertices[aloneVertexIdx];
-                Vector3 otherVertex0 = oVertices[otherVertexIdx0];
-                Vector3 otherVertex1 = oVertices[otherVertexidx1];
-
-                Vector3 aloneNormal = oNormals[aloneVertexIdx];
-                Vector3 otherNormal0 = oNormals[otherVertexIdx0];
-                Vector3 otherNormal1 = oNormals[otherVertexidx1];
-
-                Vector2 aloneUV = oUVs[aloneVertexIdx];
-                Vector2 otherUV0 = oUVs[otherVertexIdx0];
-                Vector2 otherUV1 = oUVs[otherVertexidx1];
-
-                float alone2PlaneDist = Mathf.Abs(Vector3.Dot(normal, aloneVertex - point));
-                float other02PlaneDist = Mathf.Abs(Vector3.Dot(normal, otherVertex0 - point));
-                float other12PlaneDist = Mathf.Abs(Vector3.Dot(normal, otherVertex1 - point));
-                float alone2Other0Ratio = alone2PlaneDist / (alone2PlaneDist + other02PlaneDist);
-                float alone2Other1Ratio = alone2PlaneDist / (alone2PlaneDist + other12PlaneDist);
-
-                Vector3 createdVert0 = Vector3.Lerp(aloneVertex, otherVertex0, alone2Other0Ratio);
-                Vector3 createdVert1 = Vector3.Lerp(aloneVertex, otherVertex1, alone2Other1Ratio);
-
-                Vector3 createdNormal0 = Vector3.Lerp(aloneNormal, otherNormal0, alone2Other0Ratio);
-                Vector3 createdNormal1 = Vector3.Lerp(aloneNormal, otherNormal1, alone2Other1Ratio);
-
-                Vector2 createdUV0 = Vector2.Lerp(aloneUV, otherUV0, alone2Other0Ratio);
-                Vector2 createdUV1 = Vector2.Lerp(aloneUV, otherUV1, alone2Other1Ratio);
-
-                newVertices.Add(createdVert0);
-                newVertices.Add(createdVert1);
-
-                newNormals.Add(createdNormal0);
-                newNormals.Add(createdNormal1);
-
-                newUVs.Add(createdUV0);
-                newUVs.Add(createdUV1);
-
-                float aloneSide = Vector3.Dot(normal, aloneVertex - point);
-
-                if (aloneSide < 0)
-                {
-                    //1번
-                    sideVertices1.Add(aloneVertex);
-                    sideVertices1.Add(createdVert0);
-                    sideVertices1.Add(createdVert1);
-
-                    sideNormals1.Add(aloneNormal);
-                    sideNormals1.Add(createdNormal0);
-                    sideNormals1.Add(createdNormal1);
-
-                    sideUVs1.Add(aloneUV);
-                    sideUVs1.Add(createdUV0);
-                    sideUVs1.Add(createdUV1);
-
-                    sideTris1.Add(sideTris1.Count);
-                    sideTris1.Add(sideTris1.Count);
-                    sideTris1.Add(sideTris1.Count);
-
-
-                    //2번
-                    sideVertices2.Add(otherVertex0);
-                    sideVertices2.Add(otherVertex1);
-                    sideVertices2.Add(createdVert0);
-
-                    sideNormals2.Add(otherNormal0);
-                    sideNormals2.Add(otherNormal1);
-                    sideNormals2.Add(createdNormal0);
-
-                    sideUVs2.Add(otherUV0);
-                    sideUVs2.Add(otherUV1);
-                    sideUVs2.Add(createdUV0);
-
-                    sideTris2.Add(sideTris2.Count);
-                    sideTris2.Add(sideTris2.Count);
-                    sideTris2.Add(sideTris2.Count);
-
-
-                    sideVertices2.Add(otherVertex1);
-                    sideVertices2.Add(createdVert1);
-                    sideVertices2.Add(createdVert0);
-
-                    sideNormals2.Add(otherNormal1);
-                    sideNormals2.Add(createdNormal1);
-                    sideNormals2.Add(createdNormal0);
-
-                    sideUVs2.Add(otherUV1);
-                    sideUVs2.Add(createdUV1);
-                    sideUVs2.Add(createdUV0);
-
-                    sideTris2.Add(sideTris2.Count);
-                    sideTris2.Add(sideTris2.Count);
-                    sideTris2.Add(sideTris2.Count);
-                }
-                else
-                {
-                    //2번 넣어주기
-                    sideVertices2.Add(aloneVertex);
-                    sideVertices2.Add(createdVert0);
-                    sideVertices2.Add(createdVert1);
-
-                    sideNormals2.Add(aloneNormal);
-                    sideNormals2.Add(createdNormal0);
-                    sideNormals2.Add(createdNormal1);
-
-                    sideUVs2.Add(aloneUV);
-                    sideUVs2.Add(createdUV0);
-                    sideUVs2.Add(createdUV1);
-
-                    sideTris2.Add(sideTris2.Count);
-                    sideTris2.Add(sideTris2.Count);
-                    sideTris2.Add(sideTris2.Count);
-
-                    //1번 넣우기
-                    sideVertices1.Add(otherVertex0);
-                    sideVertices1.Add(otherVertex1);
-                    sideVertices1.Add(createdVert0);
-
-                    sideNormals1.Add(otherNormal0);
-                    sideNormals1.Add(otherNormal1);
-                    sideNormals1.Add(createdNormal0);
-
-                    sideUVs1.Add(otherUV0);
-                    sideUVs1.Add(otherUV1);
-                    sideUVs1.Add(createdUV0);
-
-                    sideTris1.Add(sideTris1.Count);
-                    sideTris1.Add(sideTris1.Count);
-                    sideTris1.Add(sideTris1.Count);
-
-
-                    sideVertices1.Add(otherVertex1);
-                    sideVertices1.Add(createdVert1);
-                    sideVertices1.Add(createdVert0);
-
-                    sideNormals1.Add(otherNormal1);
-                    sideNormals1.Add(createdNormal1);
-                    sideNormals1.Add(createdNormal0);
-
-                    sideUVs1.Add(otherUV1);
-                    sideUVs1.Add(createdUV1);
-                    sideUVs1.Add(createdUV0);
-
-                    sideTris1.Add(sideTris1.Count);
-                    sideTris1.Add(sideTris1.Count);
-                    sideTris1.Add(sideTris1.Count);
-                }
+                existInterialMatIdx = i;
+                break;
             }
         }
 
-        List<Vector3> sortedVertices = new List<Vector3>();
-        SortVertices(newVertices, out sortedVertices);
+        List<Vector3> aSideVerts = new List<Vector3>();
+        List<Vector3> aSideNors = new List<Vector3>();
+        List<Vector2> aSideUvs = new List<Vector2>();
+        List<int>[] aSideTris = new List<int>[orinSubMeshCount];
 
-        List<Vector3> sideCapVertices1 = new List<Vector3>(), sideCapVertices2 = new List<Vector3>();
-        List<Vector3> sideCapNormals1 = new List<Vector3>(), sideCapNormals2 = new List<Vector3>();
-        List<Vector2> sideCapUVs1 = new List<Vector2>(), sideCapUVs2 = new List<Vector2>();
-        List<int> sideCapTrigs1 = new List<int>(), sideCapTrigs2 = new List<int>();
+        List<Vector3> bSideVerts = new List<Vector3>();
+        List<Vector3> bSideNors = new List<Vector3>();
+        List<Vector2> bSideUvs = new List<Vector2>();
+        List<int>[] bSideTris = new List<int>[orinSubMeshCount];
 
-        MakeCap(normal, sortedVertices, sideCapVertices1, sideCapVertices2,
-            sideCapNormals1, sideCapNormals2,
-            sideCapUVs1, sideCapUVs2,
-            sideCapTrigs1, sideCapTrigs2);
 
-        Mesh mesh1 = new Mesh();
-        Mesh mesh2 = new Mesh();
+        List<Vector3> createdVerts = new List<Vector3>();
+        List<Vector3> createdNors = new List<Vector3>();
+        List<Vector2> createdUvs = new List<Vector2>();
 
-        //메쉬 1 가져온거 세팅
-        mesh1.vertices = sideVertices1.ToArray();
-        mesh1.normals = sideNormals1.ToArray();
-        mesh1.uv = sideUVs1.ToArray();
-        mesh1.subMeshCount = target.GetComponent<MeshRenderer>().sharedMaterials.Length + 1; //서브 메쉬 하나 늘리기
-        mesh1.SetTriangles(sideTris1, 0);
-        mesh1.SetTriangles(sideCapTrigs1, target.GetComponent<MeshRenderer>().materials.Length);
 
-        //메쉬 2 가져온거 세팅
-        mesh2.vertices = sideVertices2.ToArray();
-        mesh2.normals = sideNormals2.ToArray();
-        mesh2.uv = sideUVs2.ToArray();
-        mesh2.subMeshCount = target.GetComponent<MeshRenderer>().sharedMaterials.Length + 1; 
-        mesh2.SetTriangles(sideTris2, 0);
-        mesh2.SetTriangles(sideCapTrigs2, target.GetComponent<MeshRenderer>().materials.Length);
-
-        GameObject object1 = new GameObject(target.name + "_A", typeof(MeshFilter), typeof(MeshRenderer));
-        GameObject object2 = new GameObject(target.name + "_B", typeof(MeshFilter), typeof(MeshRenderer));
-
-        Material[] mats = new Material[target.GetComponent<MeshRenderer>().materials.Length + 1];
-        
-        for (int i = 0; i < target.GetComponent<MeshRenderer>().materials.Length; i++)
+        for (int i = 0; i < orinSubMeshCount; i++)
         {
-            mats[i] = target.GetComponent<MeshRenderer>().materials[i];
+            int aVertCount = aSideVerts.Count;
+
+            int bVertCount = bSideVerts.Count;
+
+            ParseSubMesh(orinVerts, orinNors, orinUvs, orinMesh.GetTriangles(i),
+                _sliceNormal, _slicePoint, aSideVerts, bSideVerts,
+                aSideNors, bSideNors, aSideUvs, bSideUvs, out aSideTris[i], out bSideTris[i],
+                createdVerts, createdNors, createdUvs);
+
+            for (int j = 0; j < aSideTris[i].Count; j++)
+            {
+                aSideTris[i][j] += aVertCount;
+            }
+
+            for (int j = 0; j < bSideTris[i].Count; j++)
+            {
+                bSideTris[i][j] += bVertCount;
+            }
         }
-        
-        mats[target.GetComponent<MeshRenderer>().materials.Length] = material;
-        //Material mats = target.GetComponent<MeshRenderer>().material;
-        
-        //오브젝트 1 만들기
-        object1.GetComponent<Renderer>().materials = mats;
-        object1.GetComponent<MeshFilter>().mesh = mesh1;
-        object1.transform.position = target.transform.position;
-        object1.transform.rotation = target.transform.rotation;
-        object1.transform.localScale = target.transform.localScale;
 
-        //오브젝트 2 만들기
-        object2.GetComponent<Renderer>().materials = mats;
-        object2.GetComponent<MeshFilter>().mesh = mesh2;
-        object2.transform.position = target.transform.position;
-        object2.transform.rotation = target.transform.rotation;
-        object2.transform.localScale = target.transform.localScale;
+        List<Vector3> sortedCreatedVerts;
 
-        target.SetActive(false);
+        SortVertices(createdVerts, out sortedCreatedVerts);
 
-        return new GameObject[] { object1, object2 };
+        List<Vector3> aSideCapVerts, bSideCapVerts;
+        List<Vector3> aSideCapNors, bSideCapNors;
+        List<Vector2> aSideCapUvs, bSideCapUvs;
+        List<int> aSideCapTris, bSideCapTris;
+
+
+        MakeCap(_sliceNormal, sortedCreatedVerts, out aSideCapVerts, out bSideCapVerts, out aSideCapNors,
+            out bSideCapNors, out aSideCapUvs, out bSideCapUvs, out aSideCapTris, out bSideCapTris);
+
+
+        for (int i = 0; i < aSideCapTris.Count; i++)
+        {
+            aSideCapTris[i] += aSideVerts.Count;
+        }
+
+        for (int i = 0; i < bSideCapTris.Count; i++)
+        {
+            bSideCapTris[i] += bSideVerts.Count;
+        }
+
+
+        List<Vector3> aSideFinalVerts = new List<Vector3>();
+        List<Vector3> aSideFinalNors = new List<Vector3>();
+        List<Vector2> aSideFinalUvs = new List<Vector2>();
+
+        List<Vector3> bSideFinalVerts = new List<Vector3>();
+        List<Vector3> bSideFinalNors = new List<Vector3>();
+        List<Vector2> bSideFinalUvs = new List<Vector2>();
+
+        aSideFinalVerts.AddRange(aSideVerts);
+        aSideFinalVerts.AddRange(aSideCapVerts);
+
+        aSideFinalNors.AddRange(aSideNors);
+        aSideFinalNors.AddRange(aSideCapNors);
+
+        aSideFinalUvs.AddRange(aSideUvs);
+        aSideFinalUvs.AddRange(aSideCapUvs);
+
+        bSideFinalVerts.AddRange(bSideVerts);
+        bSideFinalVerts.AddRange(bSideCapVerts);
+
+        bSideFinalNors.AddRange(bSideNors);
+        bSideFinalNors.AddRange(bSideCapNors);
+
+        bSideFinalUvs.AddRange(bSideUvs);
+        bSideFinalUvs.AddRange(bSideCapUvs);
+
+
+        if (existInterialMatIdx > 0)
+        {
+            aSideTris[existInterialMatIdx].AddRange(aSideCapTris);
+            bSideTris[existInterialMatIdx].AddRange(bSideCapTris);
+        }
+
+        Mesh aMesh = new Mesh();
+        Mesh bMesh = new Mesh();
+
+        aMesh.vertices = aSideFinalVerts.ToArray();
+        aMesh.normals = aSideFinalNors.ToArray();
+        aMesh.uv = aSideFinalUvs.ToArray();
+        aMesh.subMeshCount = existInterialMatIdx < 0 ? orinSubMeshCount + 1 : orinSubMeshCount;
+
+        for (int i = 0; i < orinSubMeshCount; i++)
+        {
+            aMesh.SetTriangles(aSideTris[i], i);
+        }
+
+        if (existInterialMatIdx < 0) aMesh.SetTriangles(aSideCapTris, orinSubMeshCount);
+
+        bMesh.vertices = bSideFinalVerts.ToArray();
+        bMesh.normals = bSideFinalNors.ToArray();
+        bMesh.uv = bSideFinalUvs.ToArray();
+        bMesh.subMeshCount = existInterialMatIdx < 0 ? orinSubMeshCount + 1 : orinSubMeshCount;
+
+        for (int i = 0; i < orinSubMeshCount; i++)
+        {
+            bMesh.SetTriangles(bSideTris[i], i);
+        }
+
+        if (existInterialMatIdx < 0) bMesh.SetTriangles(bSideCapTris, orinSubMeshCount);
+
+        GameObject aObject = new GameObject(_target.name + "_A", typeof(MeshFilter), typeof(MeshRenderer));
+        GameObject bObject = new GameObject(_target.name + "_B", typeof(MeshFilter), typeof(MeshRenderer));
+        Material[] mats = new Material[(existInterialMatIdx < 0 ? orinSubMeshCount + 1 : orinSubMeshCount)];
+
+        for (int i = 0; i < orinSubMeshCount; i++)
+        {
+            mats[i] = orinMaterials[i];
+        }
+
+        if (existInterialMatIdx < 0) mats[orinSubMeshCount] = _ineterial;
+
+        aObject.GetComponent<MeshFilter>().sharedMesh = aMesh;
+        aObject.GetComponent<MeshRenderer>().sharedMaterials = mats;
+
+        bObject.GetComponent<MeshFilter>().sharedMesh = bMesh;
+        bObject.GetComponent<MeshRenderer>().sharedMaterials = mats;
+
+        aObject.transform.position = _target.transform.position;
+        aObject.transform.rotation = _target.transform.rotation;
+        aObject.transform.localScale = _target.transform.localScale;
+
+        bObject.transform.position = _target.transform.position;
+        bObject.transform.rotation = _target.transform.rotation;
+        bObject.transform.localScale = _target.transform.localScale;
+
+        _target.SetActive(false);
+
+        return new GameObject[] { aObject, bObject };
     }
 
-    public static void MakeCap(Vector3 faceNormal, List<Vector3> relatedVertices,
-        List<Vector3> sideCapVertices1, List<Vector3> sideCapVertices2,
-        List<Vector3> sideCapNormals1, List<Vector3> sideCapNormals2,
-        List<Vector2> sideCapUVs1, List<Vector2> sideCapUVs2,
-        List<int> sideCapTris1, List<int> sideCapTris2)
-    {
-        sideCapVertices1.AddRange(relatedVertices);
-        sideCapVertices2.AddRange(relatedVertices);
-
-        if (relatedVertices.Count < 2) return;
-
-        Vector3 center = Vector3.zero;
-        foreach (Vector3 item in relatedVertices)
-        {
-            center += item;
-        }
-
-        center /= relatedVertices.Count;
-        sideCapVertices1.Add(center);
-        sideCapVertices2.Add(center);
-
-        for (int i = 0; i < sideCapVertices1.Count; i++)
-        {
-            sideCapNormals1.Add(faceNormal);
-            sideCapNormals2.Add(faceNormal);
-        }
-
-        Vector3 forward = Vector3.zero;
-        forward.x = faceNormal.y;
-        forward.y = -faceNormal.x;
-        forward.z = faceNormal.z;
-
-        Vector3 left = Vector3.Cross(forward, faceNormal);
-        for (int i = 0; i < relatedVertices.Count; i++)
-        {
-            Vector3 dir = relatedVertices[i] - center;
-            Vector2 relatedUV = Vector2.zero;
-            relatedUV.x = 0.5f + Vector3.Dot(dir, left);
-            relatedUV.y = 0.5f + Vector3.Dot(dir, forward);
-            sideCapUVs1.Add(relatedUV);
-            sideCapUVs2.Add(relatedUV);
-        }
-
-        sideCapUVs1.Add(new Vector2(0.5f, 0.5f));
-        sideCapUVs2.Add(new Vector2(0.5f, 0.5f));
-
-        int centerIdx = sideCapVertices1.Count - 1;
-
-        float faceDir = Vector3.Dot(faceNormal,
-            Vector3.Cross(relatedVertices[0] - center, relatedVertices[1] - relatedVertices[0]));
-
-        for (int i = 0; i < sideCapVertices1.Count - 1; i++)
-        {
-            int idx0 = i;
-            int idx1 = (i + 1) % (sideCapVertices1.Count - 1);
-            if (faceDir < 0)
-            {
-                sideCapTris1.Add(centerIdx);
-                sideCapTris1.Add(idx1);
-                sideCapTris1.Add(idx0);
-
-                sideCapTris2.Add(centerIdx);
-                sideCapTris2.Add(idx0);
-                sideCapTris2.Add(idx1);
-            }
-            else
-            {
-                sideCapTris1.Add(centerIdx);
-                sideCapTris1.Add(idx0);
-                sideCapTris1.Add(idx1);
-
-                sideCapTris2.Add(centerIdx);
-                sideCapTris2.Add(idx1);
-                sideCapTris2.Add(idx0);
-            }
-        }
-    }
-
-    public static void SortVertices(List<Vector3> target,out List<Vector3> result)
-    {
-        result = new List<Vector3>();
-        result.Add(target[0]);
-        result.Add(target[1]);
-
-        int vertexSetCount = target.Count / 2;
-
-        for (int i = 0; i < vertexSetCount - 1; i++)
-        {
-            Vector3 vertex0 = target[i * 2];
-            Vector3 vertex1 = target[i * 2 + 1];
-
-            for (int j = i + 1; j < vertexSetCount; j++)
-            {
-                Vector3 cVertex0 = target[j * 2];
-                Vector3 cVertex1 = target[j * 2 + 1];
-
-                if (cVertex0 == cVertex1)
-                {
-                    result.Add(cVertex1);
-                    SwapTwoIndexSet(target, i * 2 + 2, i * 2 + 3, j * 2, j * 2 + 1);
-                }
-                else if (vertex1 == cVertex1)
-                {
-                    result.Add(cVertex0);
-                    SwapTwoIndexSet(target, i * 2 + 2, i * 2 + 3, j * 2 + 1, j * 2);
-                }
-            }
-        }
-
-        if (result[0] == result[result.Count - 1]) result.RemoveAt(result.Count - 1);
-    }
-
-    public static void SwapTwoIndexSet<T>(List<T> _target, int _idx00, int _idx01, int _idx10, int _idx11)
+   internal static void SwapTwoIndexSet<T>(ref List<T> _target, int _idx00, int _idx01, int _idx10, int _idx11)
     {
         T temp0 = _target[_idx00];
         T temp1 = _target[_idx01];
@@ -441,5 +190,374 @@ public class ObjectCut
         _target[_idx01] = _target[_idx11];
         _target[_idx10] = temp0;
         _target[_idx11] = temp1;
+    }
+
+
+    internal static void SortVertices(List<Vector3> _target, out List<Vector3> _result)
+    {
+        _result = new List<Vector3>();
+        _result.Add(_target[0]);
+        _result.Add(_target[1]);
+
+        int vertSetCount = _target.Count / 2;
+
+        for (int i = 0; i < vertSetCount - 1; i++)
+        {
+            Vector3 vert0 = _target[i * 2];
+            Vector3 vert1 = _target[i * 2 + 1];
+
+            for (int j = i + 1; j < vertSetCount; j++)
+            {
+                Vector3 cVert0 = _target[j * 2];
+                Vector3 cVert1 = _target[j * 2 + 1];
+
+                if (vert1 == cVert0)
+                {
+                    _result.Add(cVert1);
+                    SwapTwoIndexSet<Vector3>(ref _target, i * 2 + 2, i * 2 + 3, j * 2, j * 2 + 1);
+                }
+
+                else if (vert1 == cVert1)
+                {
+                    _result.Add(cVert0);
+                    SwapTwoIndexSet<Vector3>(ref _target, i * 2 + 2, i * 2 + 3, j * 2 + 1, j * 2);
+                }
+            }
+        }
+
+        if (_result[0] == _result[_result.Count - 1]) _result.RemoveAt(_result.Count - 1);
+    }
+
+    internal static void ParseSubMesh(Vector3[] _orinVerts, Vector3[] _orinNors, Vector2[] _orinUvs, int[] _subMeshTris,
+        Vector3 _sliceNormal, Vector3 _slicePoint,
+        List<Vector3> _aSideVerts, List<Vector3> _bSideVerts,
+        List<Vector3> _aSideNors, List<Vector3> _bSideNors,
+        List<Vector2> _aSideUvs, List<Vector2> _bSideUvs,
+        out List<int> _aSideTris, out List<int> _bSideTris,
+        List<Vector3> _createdVerts, List<Vector3> _createdNors, List<Vector2> _createdUvs)
+    {
+        _aSideTris = new List<int>();
+        _bSideTris = new List<int>();
+
+        int triCount = _subMeshTris.Length / 3;
+        for (int i = 0; i < triCount; i++)
+        {
+            int idx0 = i * 3;
+            int idx1 = idx0 + 1;
+            int idx2 = idx1 + 1;
+
+            int vertIdx0 = _subMeshTris[idx0];
+            int vertIdx1 = _subMeshTris[idx1];
+            int vertIdx2 = _subMeshTris[idx2];
+
+            Vector3 vert0 = _orinVerts[vertIdx0];
+            Vector3 vert1 = _orinVerts[vertIdx1];
+            Vector3 vert2 = _orinVerts[vertIdx2];
+
+            Vector3 nor0 = _orinNors[vertIdx0];
+            Vector3 nor1 = _orinNors[vertIdx1];
+            Vector3 nor2 = _orinNors[vertIdx2];
+
+            Vector2 uv0 = _orinUvs[vertIdx0];
+            Vector2 uv1 = _orinUvs[vertIdx1];
+            Vector2 uv2 = _orinUvs[vertIdx2];
+
+
+            float dot0 = Vector3.Dot(_sliceNormal, vert0 - _slicePoint);
+            float dot1 = Vector3.Dot(_sliceNormal, vert1 - _slicePoint);
+            float dot2 = Vector3.Dot(_sliceNormal, vert2 - _slicePoint);
+
+            if (dot0 < 0 && dot1 < 0 && dot2 < 0)
+            {
+                _aSideVerts.Add(vert0);
+                _aSideVerts.Add(vert1);
+                _aSideVerts.Add(vert2);
+                
+                _aSideNors.Add(nor0);
+                _aSideNors.Add(nor1);
+                _aSideNors.Add(nor2);
+
+                _aSideUvs.Add(uv0);
+                _aSideUvs.Add(uv1);
+                _aSideUvs.Add(uv2);
+
+                _aSideTris.Add(_aSideTris.Count);
+                _aSideTris.Add(_aSideTris.Count);
+                _aSideTris.Add(_aSideTris.Count);
+            }
+
+            else if (dot0 >= 0 && dot1 >= 0 && dot2 >= 0)
+            {
+                _bSideVerts.Add(vert0);
+                _bSideVerts.Add(vert1);
+                _bSideVerts.Add(vert2);
+
+                _bSideNors.Add(nor0);
+                _bSideNors.Add(nor1);
+                _bSideNors.Add(nor2);
+
+                _bSideUvs.Add(uv0);
+                _bSideUvs.Add(uv1);
+                _bSideUvs.Add(uv2);
+
+                _bSideTris.Add(_bSideTris.Count);
+                _bSideTris.Add(_bSideTris.Count);
+                _bSideTris.Add(_bSideTris.Count);
+            }
+
+            else
+            {
+                int aloneVertIdx = Mathf.Sign(dot0) == Mathf.Sign(dot1)
+                    ? vertIdx2
+                    : (Mathf.Sign(dot0) == Mathf.Sign(dot2) ? vertIdx1 : vertIdx0);
+
+                int otherVertIdx0 = Mathf.Sign(dot0) == Mathf.Sign(dot1)
+                    ? vertIdx0
+                    : (Mathf.Sign(dot0) == Mathf.Sign(dot2) ? vertIdx2 : vertIdx1);
+
+                int otherVertIdx1 = Mathf.Sign(dot0) == Mathf.Sign(dot1)
+                    ? vertIdx1
+                    : (Mathf.Sign(dot0) == Mathf.Sign(dot2) ? vertIdx0 : vertIdx2);
+
+                Vector3 aloneVert = _orinVerts[aloneVertIdx];
+                Vector3 otherVert0 = _orinVerts[otherVertIdx0];
+                Vector3 otherVert1 = _orinVerts[otherVertIdx1];
+
+                Vector3 aloneNor = _orinNors[aloneVertIdx];
+                Vector3 otherNor0 = _orinNors[otherVertIdx0];
+                Vector3 otherNor1 = _orinNors[otherVertIdx1];
+
+                Vector2 aloneUv = _orinUvs[aloneVertIdx];
+                Vector2 otherUv0 = _orinUvs[otherVertIdx0];
+                Vector2 otherUv1 = _orinUvs[otherVertIdx1];
+
+
+                float alone2PlaneDist = Mathf.Abs(Vector3.Dot(_sliceNormal, aloneVert - _slicePoint));
+                float other02PlaneDist = Mathf.Abs(Vector3.Dot(_sliceNormal, otherVert0 - _slicePoint));
+                float other12PlaneDist = Mathf.Abs(Vector3.Dot(_sliceNormal, otherVert1 - _slicePoint));
+
+                float alone2Other0Ratio = alone2PlaneDist / (alone2PlaneDist + other02PlaneDist);
+                float alone2Other1Ratio = alone2PlaneDist / (alone2PlaneDist + other12PlaneDist);
+
+
+                Vector3 createdVert0 = Vector3.Lerp(aloneVert, otherVert0, alone2Other0Ratio);
+                Vector3 createdVert1 = Vector3.Lerp(aloneVert, otherVert1, alone2Other1Ratio);
+
+                Vector3 createdNor0 = Vector3.Lerp(aloneNor, otherNor0, alone2Other0Ratio);
+                Vector3 createdNor1 = Vector3.Lerp(aloneNor, otherNor1, alone2Other1Ratio);
+
+                Vector2 createdUv0 = Vector2.Lerp(aloneUv, otherUv0, alone2Other0Ratio);
+                Vector2 createdUv1 = Vector2.Lerp(aloneUv, otherUv1, alone2Other1Ratio);
+
+                _createdVerts.Add(createdVert0);
+                _createdVerts.Add(createdVert1);
+
+                _createdNors.Add(createdNor0);
+                _createdNors.Add(createdNor1);
+
+                _createdUvs.Add(createdUv0);
+                _createdUvs.Add(createdUv1);
+
+                float aloneSide = Vector3.Dot(_sliceNormal, aloneVert - _slicePoint);
+
+                if (aloneSide < 0)
+                {
+                    _aSideVerts.Add(aloneVert);
+                    _aSideVerts.Add(createdVert0);
+                    _aSideVerts.Add(createdVert1);
+
+                    _aSideNors.Add(aloneNor);
+                    _aSideNors.Add(createdNor0);
+                    _aSideNors.Add(createdNor1);
+
+                    _aSideUvs.Add(aloneUv);
+                    _aSideUvs.Add(createdUv0);
+                    _aSideUvs.Add(createdUv1);
+
+                    _aSideTris.Add(_aSideTris.Count);
+                    _aSideTris.Add(_aSideTris.Count);
+                    _aSideTris.Add(_aSideTris.Count);
+
+
+
+                    _bSideVerts.Add(otherVert0);
+                    _bSideVerts.Add(otherVert1);
+                    _bSideVerts.Add(createdVert0);
+
+                    _bSideNors.Add(otherNor0);
+                    _bSideNors.Add(otherNor1);
+                    _bSideNors.Add(createdNor0);
+
+                    _bSideUvs.Add(otherUv0);
+                    _bSideUvs.Add(otherUv1);
+                    _bSideUvs.Add(createdUv0);
+
+                    _bSideTris.Add(_bSideTris.Count);
+                    _bSideTris.Add(_bSideTris.Count);
+                    _bSideTris.Add(_bSideTris.Count);
+
+                    _bSideVerts.Add(otherVert1);
+                    _bSideVerts.Add(createdVert1);
+                    _bSideVerts.Add(createdVert0);
+
+                    _bSideNors.Add(otherNor1);
+                    _bSideNors.Add(createdNor1);
+                    _bSideNors.Add(createdNor0);
+
+                    _bSideUvs.Add(otherUv1);
+                    _bSideUvs.Add(createdUv1);
+                    _bSideUvs.Add(createdUv0);
+
+                    _bSideTris.Add(_bSideTris.Count);
+                    _bSideTris.Add(_bSideTris.Count);
+                    _bSideTris.Add(_bSideTris.Count);
+                }
+
+                else
+                {
+                    _bSideVerts.Add(aloneVert);
+                    _bSideVerts.Add(createdVert0);
+                    _bSideVerts.Add(createdVert1);
+
+                    _bSideNors.Add(aloneNor);
+                    _bSideNors.Add(createdNor0);
+                    _bSideNors.Add(createdNor1);
+
+                    _bSideUvs.Add(aloneUv);
+                    _bSideUvs.Add(createdUv0);
+                    _bSideUvs.Add(createdUv1);
+
+                    _bSideTris.Add(_bSideTris.Count);
+                    _bSideTris.Add(_bSideTris.Count);
+                    _bSideTris.Add(_bSideTris.Count);
+
+                    _aSideVerts.Add(otherVert0);
+                    _aSideVerts.Add(otherVert1);
+                    _aSideVerts.Add(createdVert0);
+
+                    _aSideNors.Add(otherNor0);
+                    _aSideNors.Add(otherNor1);
+                    _aSideNors.Add(createdNor0);
+
+                    _aSideUvs.Add(otherUv0);
+                    _aSideUvs.Add(otherUv1);
+                    _aSideUvs.Add(createdUv0);
+
+                    _aSideTris.Add(_aSideTris.Count);
+                    _aSideTris.Add(_aSideTris.Count);
+                    _aSideTris.Add(_aSideTris.Count);
+
+                    _aSideVerts.Add(otherVert1);
+                    _aSideVerts.Add(createdVert1);
+                    _aSideVerts.Add(createdVert0);
+
+                    _aSideNors.Add(otherNor1);
+                    _aSideNors.Add(createdNor1);
+                    _aSideNors.Add(createdNor0);
+
+                    _aSideUvs.Add(otherUv1);
+                    _aSideUvs.Add(createdUv1);
+                    _aSideUvs.Add(createdUv0);
+
+                    _aSideTris.Add(_aSideTris.Count);
+                    _aSideTris.Add(_aSideTris.Count);
+                    _aSideTris.Add(_aSideTris.Count);
+                }
+            }
+        }
+    }
+
+
+    internal static void MakeCap(Vector3 _faceNormal, List<Vector3> _relatedVerts,
+        out List<Vector3> _aSideVerts, out List<Vector3> _bSideVerts,
+        out List<Vector3> _aSideNors, out List<Vector3> _bSideNors,
+        out List<Vector2> _aSideUvs, out List<Vector2> _bSideUvs,
+        out List<int> _aSideTris, out List<int> _bSideTris)
+    {
+        _aSideVerts = new List<Vector3>();
+        _aSideNors = new List<Vector3>();
+        _aSideUvs = new List<Vector2>();
+        _aSideTris = new List<int>();
+
+        _bSideVerts = new List<Vector3>();
+        _bSideNors = new List<Vector3>();
+        _bSideUvs = new List<Vector2>();
+        _bSideTris = new List<int>();
+
+        _aSideVerts.AddRange(_relatedVerts);
+        _bSideVerts.AddRange(_relatedVerts);
+
+        if (_relatedVerts.Count < 2) return;
+
+        Vector3 center = Vector3.zero;
+
+        foreach (Vector3 v in _relatedVerts)
+        {
+            center += v;
+        }
+
+        center /= _relatedVerts.Count;
+
+        _aSideVerts.Add(center);
+        _bSideVerts.Add(center);
+
+        for (int i = 0; i < _aSideVerts.Count; i++)
+        {
+            _aSideNors.Add(_faceNormal);
+            _bSideNors.Add(-_faceNormal);
+        }
+
+        Vector3 forward = Vector3.zero;
+        forward.x = _faceNormal.y;
+        forward.y = -_faceNormal.x;
+        forward.z = _faceNormal.z;
+
+        Vector3 left = Vector3.Cross(forward, _faceNormal);
+
+        for (int i = 0; i < _relatedVerts.Count; i++)
+        {
+            Vector3 dir = _relatedVerts[i] - center;
+            Vector2 relatedUV = Vector2.zero;
+
+            relatedUV.x = 0.5f + Vector3.Dot(dir, left);
+            relatedUV.y = 0.5f + Vector3.Dot(dir, forward);
+
+            _aSideUvs.Add(relatedUV);
+            _bSideUvs.Add(relatedUV);
+        }
+
+        _aSideUvs.Add(new Vector2(0.5f, 0.5f));
+        _bSideUvs.Add(new Vector2(0.5f, 0.5f));
+
+        int centerIdx = _aSideVerts.Count - 1;
+
+        float faceDir = Vector3.Dot(_faceNormal,
+            Vector3.Cross(_relatedVerts[0] - center, _relatedVerts[1] - _relatedVerts[0]));
+
+        for (int i = 0; i < _aSideVerts.Count - 1; i++)
+        {
+            int idx0 = i;
+            int idx1 = (i + 1) % (_aSideVerts.Count - 1);
+            if (faceDir < 0)
+            {
+                _aSideTris.Add(centerIdx);
+                _aSideTris.Add(idx1);
+                _aSideTris.Add(idx0);
+
+                _bSideTris.Add(centerIdx);
+                _bSideTris.Add(idx0);
+                _bSideTris.Add(idx1);
+            }
+            else
+            {
+                _aSideTris.Add(centerIdx);
+                _aSideTris.Add(idx0);
+                _aSideTris.Add(idx1);
+
+                _bSideTris.Add(centerIdx);
+                _bSideTris.Add(idx1);
+                _bSideTris.Add(idx0);
+            }
+        }
     }
 }
