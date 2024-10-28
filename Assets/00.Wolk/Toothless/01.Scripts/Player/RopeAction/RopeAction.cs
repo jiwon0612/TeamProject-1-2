@@ -10,7 +10,7 @@ public class RopeAction : MonoBehaviour, IPlayerComponent
     [SerializeField] private float horizontalForce;
     [SerializeField] private float forwardForce;
     [SerializeField] private float extendCableSpeed;
-    
+
     private LineRenderer _line;
     private Vector3 _grapplePoint;
     [SerializeField] private LayerMask whatIsWall;
@@ -32,6 +32,7 @@ public class RopeAction : MonoBehaviour, IPlayerComponent
         _rigid = _player.GetComp<PlayerMovement>().RigidCompo;
 
         _player.InputCompo.OnShootEvent += HandleShootEvent;
+        
     }
 
     private void HandleShootEvent(bool isShooting)
@@ -109,19 +110,20 @@ public class RopeAction : MonoBehaviour, IPlayerComponent
         {
             float extendedDistance = Vector3.Distance(transform.position, GetGrapplePoint()) + extendCableSpeed;
             
-            Joint.maxDistance = extendedDistance * 0.8f;
-            Joint.minDistance = extendedDistance * 0.25f;
+            Joint.maxDistance = extendedDistance * 1.2f;
+            Joint.minDistance = extendedDistance * 0.85f;
         }
 
         if (Keyboard.current.spaceKey.isPressed)
         {
+            Debug.Log("엄제유");
             Vector3 directionPoint = GetGrapplePoint() - transform.position;
             _rigid.AddForce(directionPoint.normalized * extendCableSpeed);
             
             float distanceFromPoint = Vector3.Distance(transform.position,GetGrapplePoint());
             
-            Joint.maxDistance = distanceFromPoint * 0.9f;
-            Joint.minDistance = distanceFromPoint;
+            Joint.maxDistance = distanceFromPoint * 0.75f;
+            Joint.minDistance = distanceFromPoint * 0.25f;
         }
     }
 }
