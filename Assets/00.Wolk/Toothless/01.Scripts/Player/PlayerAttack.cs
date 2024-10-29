@@ -5,6 +5,7 @@ public class PlayerAttack : MonoBehaviour, IPlayerComponent
     private Animator _animator;
     
     private Player _player;
+    private bool _isComboAtk;
     
     private readonly int _atkHash = Animator.StringToHash("IsAtk");
     
@@ -26,4 +27,6 @@ public class PlayerAttack : MonoBehaviour, IPlayerComponent
     {
         _animator.SetTrigger(_atkHash);
     }
+
+   
 }
