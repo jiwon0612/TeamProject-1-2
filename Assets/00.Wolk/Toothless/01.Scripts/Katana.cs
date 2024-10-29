@@ -49,8 +49,6 @@ public class Katana : MonoBehaviour, IPlayerComponent
 
                 Vector3 normal = (_normalPoint.position - transform.position);
 
-                Debug.Log(normal);
-
                 //GameObject[] objects = ObjectCut.Slicer(collision.gameObject,normal, hitPoint, _sliceMaterial);
                 GameObject[] objects = MeshCut.Cut(collision.gameObject, hitPoint, normal, _sliceMaterial);
 
@@ -69,14 +67,9 @@ public class Katana : MonoBehaviour, IPlayerComponent
         }
     }
 
-    // public void OnHitEvent()
-    // {
-    //     
-    // }
-    
     private void OnCollisionExit(Collision other)
     {
-        if (_fi == true)
+        if (_fi)
             _fi = false;
     }
 }

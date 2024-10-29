@@ -112,17 +112,13 @@ public class MeshCut : MonoBehaviour
                     left_Gather_subIndices[sub].Add(p1);
                     left_Gather_subIndices[sub].Add(p2);
                     left_Gather_subIndices[sub].Add(p3);
-
                 }
                 else
                 {
-
                     right_Gather_subIndices[sub].Add(p1);
                     right_Gather_subIndices[sub].Add(p2);
                     right_Gather_subIndices[sub].Add(p3);
-
                 }
-
             }
             else
             { // cut face
@@ -130,7 +126,6 @@ public class MeshCut : MonoBehaviour
                 Cut_this_Face(sub, p1, p2, p3);
             }
         }
-
 
         // set final arrays
         ResetFinalArrays();
@@ -184,7 +179,6 @@ public class MeshCut : MonoBehaviour
 
     static void ResetGatheringValues()
     {
-
         left_Gather_subIndices[0].Clear();
         left_Gather_subIndices[1].Clear();
         left_Gather_added_Points[0].Clear();
@@ -233,7 +227,6 @@ public class MeshCut : MonoBehaviour
         int p = index1;
         for (int side = 0; side < 3; side++)
         {
-
             switch (side)
             {
                 case 0:
@@ -245,14 +238,11 @@ public class MeshCut : MonoBehaviour
                 case 2:
                     p = index3;
                     break;
-
             }
-
             if (sides[side])
             {
                 if (leftPoint1 == Vector3.zero)
                 {
-
                     leftPoint1 = victim_mesh.vertices[p];
                     leftPoint2 = leftPoint1;
                     left_uv1 = victim_mesh.uv[p];
@@ -263,7 +253,6 @@ public class MeshCut : MonoBehaviour
                 }
                 else
                 {
-
                     leftPoint2 = victim_mesh.vertices[p];
                     left_uv2 = victim_mesh.uv[p];
                     left_normal2 = victim_mesh.normals[p];
@@ -274,7 +263,6 @@ public class MeshCut : MonoBehaviour
             {
                 if (rightPoint1 == Vector3.zero)
                 {
-
                     rightPoint1 = victim_mesh.vertices[p];
                     rightPoint2 = rightPoint1;
                     right_uv1 = victim_mesh.uv[p];
@@ -285,7 +273,6 @@ public class MeshCut : MonoBehaviour
                 }
                 else
                 {
-
                     rightPoint2 = victim_mesh.vertices[p];
                     right_uv2 = victim_mesh.uv[p];
                     right_normal2 = victim_mesh.normals[p];
@@ -293,8 +280,7 @@ public class MeshCut : MonoBehaviour
                 }
             }
         }
-
-
+        
         float normalizedDistance = 0.0f;
         float distance = 0;
         blade.Raycast(new Ray(leftPoint1, (rightPoint1 - leftPoint1).normalized), out distance);
@@ -339,7 +325,6 @@ public class MeshCut : MonoBehaviour
 
     static void Add_Left_triangle(int submesh, Vector3 faceNormal, Vector3[] points, Vector2[] uvs, Vector3[] normals)
     {
-
         int p1 = 0;
         int p2 = 1;
         int p3 = 2;
@@ -348,7 +333,6 @@ public class MeshCut : MonoBehaviour
 
         if (Vector3.Dot(calculated_normal, faceNormal) < 0)
         {
-
             p1 = 2;
             p2 = 1;
             p3 = 0;
@@ -370,8 +354,6 @@ public class MeshCut : MonoBehaviour
 
     static void Add_Right_triangle(int submesh, Vector3 faceNormal, Vector3[] points, Vector2[] uvs, Vector3[] normals)
     {
-
-
         int p1 = 0;
         int p2 = 1;
         int p3 = 2;
@@ -385,8 +367,7 @@ public class MeshCut : MonoBehaviour
             p2 = 1;
             p3 = 0;
         }
-
-
+        
         right_Gather_added_Points[submesh].Add(points[p1]);
         right_Gather_added_Points[submesh].Add(points[p2]);
         right_Gather_added_Points[submesh].Add(points[p3]);
@@ -404,7 +385,6 @@ public class MeshCut : MonoBehaviour
 
     static void ResetFinalArrays()
     {
-
         left_Final_subIndices[0].Clear();
         left_Final_subIndices[1].Clear();
         left_Final_vertices.Clear();
@@ -421,15 +401,12 @@ public class MeshCut : MonoBehaviour
 
     static void SetFinalArrays_withOriginals()
     {
-
         int p = 0;
 
         for (int submesh = 0; submesh < 2; submesh++)
         {
-
             for (int i = 0; i < left_Gather_subIndices[submesh].Count; i++)
             {
-
                 p = left_Gather_subIndices[submesh][i];
 
                 left_Final_vertices.Add(victim_mesh.vertices[p]);
@@ -438,10 +415,8 @@ public class MeshCut : MonoBehaviour
                 left_Final_uvs.Add(victim_mesh.uv[p]);
 
             }
-
             for (int i = 0; i < right_Gather_subIndices[submesh].Count; i++)
             {
-
                 p = right_Gather_subIndices[submesh][i];
 
                 right_Final_vertices.Add(victim_mesh.vertices[p]);
@@ -450,22 +425,17 @@ public class MeshCut : MonoBehaviour
                 right_Final_uvs.Add(victim_mesh.uv[p]);
 
             }
-
         }
-
     }
 
     static void AddNewTriangles_toFinalArrays()
     {
-
         for (int submesh = 0; submesh < 2; submesh++)
         {
-
             int count = left_Final_vertices.Count;
             // add the new ones
             for (int i = 0; i < left_Gather_added_Points[submesh].Count; i++)
             {
-
                 left_Final_vertices.Add(left_Gather_added_Points[submesh][i]);
                 left_Final_subIndices[submesh].Add(i + count);
                 left_Final_uvs.Add(left_Gather_added_uvs[submesh][i]);
@@ -477,7 +447,6 @@ public class MeshCut : MonoBehaviour
 
             for (int i = 0; i < right_Gather_added_Points[submesh].Count; i++)
             {
-
                 right_Final_vertices.Add(right_Gather_added_Points[submesh][i]);
                 right_Final_subIndices[submesh].Add(i + count);
                 right_Final_uvs.Add(right_Gather_added_uvs[submesh][i]);
@@ -485,7 +454,6 @@ public class MeshCut : MonoBehaviour
 
             }
         }
-
     }
 
     private static List<Vector3> capVertTracker = new List<Vector3>();
@@ -493,7 +461,6 @@ public class MeshCut : MonoBehaviour
 
     static void MakeCaps()
     {
-
         capVertTracker.Clear();
 
         for (int i = 0; i < createdVertexPoints.Count; i++)
@@ -532,16 +499,12 @@ public class MeshCut : MonoBehaviour
                         }
                     }
                 }
-
                 FillCap(capVertpolygon);
-
             }
-
     }
 
     static void FillCap(List<Vector3> vertices)
     {
-
         List<int> triangles = new List<int>();
         List<Vector2> uvs = new List<Vector2>();
         List<Vector3> normals = new List<Vector3>();
@@ -551,8 +514,7 @@ public class MeshCut : MonoBehaviour
             center += point;
 
         center = center / vertices.Count;
-
-
+        
         Vector3 upward = Vector3.zero;
         // 90 degree turn
         upward.x = blade.normal.y;
@@ -565,7 +527,6 @@ public class MeshCut : MonoBehaviour
 
         for (int i = 0; i < vertices.Count; i++)
         {
-
             displacement = vertices[i] - center;
             relativePosition = Vector3.zero;
             relativePosition.x = 0.5f + Vector3.Dot(displacement, left);
@@ -585,7 +546,6 @@ public class MeshCut : MonoBehaviour
         int otherIndex = 0;
         for (int i = 0; i < vertices.Count; i++)
         {
-
             otherIndex = (i + 1) % (vertices.Count - 1);
 
             calculated_normal = Vector3.Cross((vertices[otherIndex] - vertices[i]).normalized,
@@ -593,31 +553,26 @@ public class MeshCut : MonoBehaviour
 
             if (Vector3.Dot(calculated_normal, blade.normal) < 0)
             {
-
                 triangles.Add(vertices.Count - 1);
                 triangles.Add(otherIndex);
                 triangles.Add(i);
             }
             else
             {
-
                 triangles.Add(i);
                 triangles.Add(otherIndex);
                 triangles.Add(vertices.Count - 1);
             }
-
         }
 
         int index = 0;
         for (int i = 0; i < triangles.Count; i++)
         {
-
             index = triangles[i];
             right_Final_vertices.Add(vertices[index]);
             right_Final_subIndices[1].Add(right_Final_vertices.Count - 1);
             right_Final_normals.Add(normals[index]);
             right_Final_uvs.Add(uvs[index]);
-
         }
 
         for (int i = 0; i < normals.Count; i++)
@@ -628,7 +583,6 @@ public class MeshCut : MonoBehaviour
         int temp1, temp2;
         for (int i = 0; i < triangles.Count; i += 3)
         {
-
             temp1 = triangles[i + 2];
             temp2 = triangles[i];
 
@@ -638,7 +592,6 @@ public class MeshCut : MonoBehaviour
 
         for (int i = 0; i < triangles.Count; i++)
         {
-
             index = triangles[i];
             left_Final_vertices.Add(vertices[index]);
             left_Final_subIndices[1].Add(left_Final_vertices.Count - 1);
@@ -646,6 +599,5 @@ public class MeshCut : MonoBehaviour
             left_Final_uvs.Add(uvs[index]);
 
         }
-
     }
 }
