@@ -304,9 +304,10 @@ public class ObjectCut
                 _bSideTris.Add(_bSideTris.Count);
                 _bSideTris.Add(_bSideTris.Count);
             }
-
             else
             {
+                Debug.Log($"{dot0}, {dot1}, {dot2}");
+                
                 int aloneVertIdx = Mathf.Sign(dot0) == Mathf.Sign(dot1)
                     ? vertIdx2
                     : (Mathf.Sign(dot0) == Mathf.Sign(dot2) ? vertIdx1 : vertIdx0);
