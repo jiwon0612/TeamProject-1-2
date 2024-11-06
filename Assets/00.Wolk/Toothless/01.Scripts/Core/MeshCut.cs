@@ -66,7 +66,7 @@ public class MeshCut : MonoBehaviour
         blade = new Plane(victim.transform.InverseTransformDirection(-normalDirection),
                           victim.transform.InverseTransformPoint(anchorPoint));
 
-        victim_mesh = victim.GetComponent<MeshFilter>().mesh;
+        victim_mesh = victim.GetComponentInChildren<MeshFilter>().mesh;
         victim_mesh.subMeshCount = 2;
 
         ResetGatheringValues();
@@ -157,20 +157,20 @@ public class MeshCut : MonoBehaviour
         right_HalfMesh.uv = right_Final_uvs.ToArray();
 
         victim.name = "leftSide";
-        victim.GetComponent<MeshFilter>().mesh = left_HalfMesh;
+        victim.GetComponentInChildren<MeshFilter>().mesh = left_HalfMesh;
 
-        Material[] mats = new Material[] { victim.GetComponent<MeshRenderer>().material, capMaterial };
+        Material[] mats = new Material[] { victim.GetComponentInChildren<MeshRenderer>().material, capMaterial };
 
         GameObject leftSideObj = victim;
 
         GameObject rightSideObj = new GameObject("rightSide", typeof(MeshFilter), typeof(MeshRenderer));
         rightSideObj.transform.position = victim_transform.position;
         rightSideObj.transform.rotation = victim_transform.rotation;
-        rightSideObj.GetComponent<MeshFilter>().mesh = right_HalfMesh;
+        rightSideObj.GetComponentInChildren<MeshFilter>().mesh = right_HalfMesh;
 
 
-        leftSideObj.GetComponent<MeshRenderer>().materials = mats;
-        rightSideObj.GetComponent<MeshRenderer>().materials = mats;
+        leftSideObj.GetComponentInChildren<MeshRenderer>().materials = mats;
+        rightSideObj.GetComponentInChildren<MeshRenderer>().materials = mats;
 
 
         return new GameObject[] { leftSideObj, rightSideObj };

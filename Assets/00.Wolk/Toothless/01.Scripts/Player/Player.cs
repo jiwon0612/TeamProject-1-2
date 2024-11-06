@@ -47,11 +47,13 @@ public class Player : MonoBehaviour
         // StateMachine.Initialize(PlayerStateType.Idle);
 
         GetComp<InputReader>().OnJumpEvent += GetComp<PlayerMovement>().Jump;
+        GetComp<InputReader>().OnDeshEvent += GetComp<PlayerMovement>().Dash;
     }
 
     private void OnDisable()
     {
         GetComp<InputReader>().OnJumpEvent -= GetComp<PlayerMovement>().Jump;
+        GetComp<InputReader>().OnDeshEvent -= GetComp<PlayerMovement>().Dash;
     }
 
     public T GetComp<T>() where T : class

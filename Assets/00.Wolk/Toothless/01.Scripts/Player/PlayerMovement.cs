@@ -95,6 +95,15 @@ public class PlayerMovement : MonoBehaviour, IPlayerComponent
         RigidCompo.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);  
     }
 
+    public void Dash()
+    {
+        if (!isGround.Value && _rope.IsSwhinging)
+        {
+            _rope.RopeDash(transform.forward);
+            Debug.Log(10);
+        }
+    }
+
 #if UNITY_EDITOR
 
     private void OnDrawGizmosSelected()
