@@ -6,7 +6,7 @@ using BehaviorDesigner.Runtime.Tasks.Unity.UnityPhysics2D;
 using DG.Tweening;
 using UnityEngine.Events;
 
-public class Turret : MonoBehaviour
+public class Turret : MonoBehaviour, IHitable
 {
     [Header("TurretSetting")] [SerializeField]
     private float turretSearchRange;
@@ -85,7 +85,11 @@ public class Turret : MonoBehaviour
     public void Shoot()
     {
         _lastShootTime = Time.time + turretAttackCollTime;
-        Bullet bullet = Instantiate(bulletPrefab);
+        // Bullet bullet = Instantiate(bulletPrefab);
+        // bullet.transform.position = _turretPo.position;
+        // bullet.InitAndFire(_turretPo.forward, _turretPo.rotation);
+        
+        Bullet bullet = PoolManager.Instance.Pop("Bullet") as Bullet;
         bullet.transform.position = _turretPo.position;
         bullet.InitAndFire(_turretPo.forward, _turretPo.rotation);
 
@@ -158,5 +162,12 @@ public class Turret : MonoBehaviour
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(_turretPo.position, turretSearchRange);
         Gizmos.color = Color.white;
+    }
+
+    public void Hit()
+    {
+        _turretBody.parent = null;
+        _turretLag.parent = null;
+        _turretPo.parent = null;
     }
 }

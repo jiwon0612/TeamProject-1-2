@@ -148,3 +148,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   force: 15
   deadTime: 2
+  poolName: Bullet
