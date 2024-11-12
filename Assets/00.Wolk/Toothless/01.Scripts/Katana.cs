@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -5,7 +6,9 @@ public class Katana : MonoBehaviour, IPlayerComponent
 {
     [SerializeField] private LayerMask _whatIsTarget;
     [SerializeField] private Material _sliceMaterial;
-
+    [SerializeField] private Vector3 boxSize;
+    [SerializeField] private Transform center;
+    [SerializeField] private int maxColliderCount = 5;
     [SerializeField] private Transform _normalPoint;
 
     public UnityEvent OnHitEvent;
@@ -13,22 +16,35 @@ public class Katana : MonoBehaviour, IPlayerComponent
     private TrailRenderer _trail;
     private AnimationEndTrigger _animaTrigger;
     private Player _player;
+    private Collider[] _collider;
 
     private bool _fi = false;
+    private bool _isAttack;
 
     public void Initialize(Player player)
     {
         _player = player;
         _animaTrigger = _player.GetComp<AnimationEndTrigger>();
         _trail = GetComponentInChildren<TrailRenderer>();
+        _collider = new Collider[maxColliderCount];
 
         _animaTrigger.OnAnimationPlaying.OnValueChanged += HandleEffectPaly;
         _trail.emitting = false;
+        _isAttack = false;
     }
 
     private void HandleEffectPaly(bool prev, bool next)
     {
         _trail.emitting = next;
+    }
+
+    private void Update()
+    {
+        if (_isAttack)
+        {
+            int cnt = Physics.OverlapBoxNonAlloc(center.position, boxSize, _collider, transform.rotation,
+                _whatIsTarget);
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -65,9 +81,24 @@ public class Katana : MonoBehaviour, IPlayerComponent
         }
     }
 
+    public void StartAttack()
+    {
+    }
+
     private void OnCollisionExit(Collision other)
     {
         if (_fi)
             _fi = false;
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (center != null)
+        {
+            Gizmos.color = Color.cyan;
+            Gizmos.matrix = center.localToWorldMatrix;
+            Gizmos.DrawWireCube(center.localPosition, boxSize);
+            Gizmos.color = Color.white;
+        }
     }
 }
