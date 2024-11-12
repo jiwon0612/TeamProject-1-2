@@ -19,6 +19,11 @@ public class RopeAction : MonoBehaviour, IPlayerComponent
     [SerializeField] private Transform gunTip;
     [SerializeField] private float _maxDistance;
     private Transform _cam;
+
+    [Header("GrappleingSetting")] 
+    [SerializeField] private float spring;
+    [SerializeField] private float damper;
+    [SerializeField] private float massScale;
     
     [Header("DeshSetting")]
     [SerializeField] private float deshPower;
@@ -65,9 +70,9 @@ public class RopeAction : MonoBehaviour, IPlayerComponent
             Joint.maxDistance = distance * 0.8f;
             Joint.minDistance = distance * 0.25f;
 
-            Joint.spring = 4.5f;
-            Joint.damper = 7f;
-            Joint.massScale = 4.5f;
+            Joint.spring = spring;
+            Joint.damper = damper;
+            Joint.massScale = massScale;
 
             _line.positionCount = 2;
         }
@@ -87,7 +92,9 @@ public class RopeAction : MonoBehaviour, IPlayerComponent
     private void DrawGrapple()
     {
         if (!Joint) return;
-
+        
+        
+        
         _line.SetPosition(0, gunTip.position);
         _line.SetPosition(1, _grapplePoint);
     }

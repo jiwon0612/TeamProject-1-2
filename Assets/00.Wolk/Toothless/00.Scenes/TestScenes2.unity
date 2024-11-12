@@ -399,7 +399,10 @@ MonoBehaviour:
     m_Bits: 64
   gunTip: {fileID: 554654587}
   _maxDistance: 100
-  deshPower: 15
+  spring: 7
+  damper: 4
+  massScale: 4.5
+  deshPower: 7
   OnDeshEvent:
     m_PersistentCalls:
       m_Calls:
@@ -1008,6 +1011,7 @@ Transform:
   m_Children:
   - {fileID: 1780977850}
   - {fileID: 1081549894}
+  - {fileID: 1448963677}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &958531487
@@ -1054,7 +1058,7 @@ LineRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6014503084011515501}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -1141,7 +1145,7 @@ LineRenderer:
     alignment: 0
     textureMode: 0
     textureScale: {x: 1, y: 1}
-    shadowBias: 0.5
+    shadowBias: 0
     generateLightingData: 0
   m_MaskInteraction: 0
   m_UseWorldSpace: 1
@@ -1703,6 +1707,51 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfa925085cc7cab40af2f3fc96c100ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1448963676
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1448963677}
+  - component: {fileID: 1448963678}
+  m_Layer: 0
+  m_Name: DataManger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1448963677
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1448963676}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 908553113}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1448963678
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1448963676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd76c4c3a59a831479093f39245d6c35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fileName: SaveData
 --- !u!1 &1461463081
 GameObject:
   m_ObjectHideFlags: 0
