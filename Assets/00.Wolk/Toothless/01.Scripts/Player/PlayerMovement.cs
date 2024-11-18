@@ -5,15 +5,14 @@ using UnityEngine.Serialization;
 
 public class PlayerMovement : MonoBehaviour, IPlayerComponent
 {
-    [Header("Setting")] 
-    [SerializeField] private float moveSpeed;
+    [Header("Setting")] [SerializeField] private float moveSpeed;
     [SerializeField] private float swhingSpeed;
     [SerializeField] private float airSpeed;
-    
+
     private float _speed;
 
-    [Header("JumpSetting")] 
-    [SerializeField] private Transform groundCheck;
+    [Header("JumpSetting")] [SerializeField]
+    private Transform groundCheck;
 
     [SerializeField] private Vector3 groundCheckerSize;
     [SerializeField] private LayerMask whatIsGround;
@@ -43,12 +42,12 @@ public class PlayerMovement : MonoBehaviour, IPlayerComponent
         IsGroundChecker();
 
         CheckIsSwhing();
-        
+
         SetMovement(_player.GetComp<InputReader>().MovementDir);
 
         if (!IsCanMove && !_rope.IsSwhinging && isGround.Value)
             RigidCompo.velocity = _playerVelocity;
-        
+
         // if (!isGround.Value)
         //     SetInAirMovement(_player.GetComp<InputReader>().MovementDir);
     }
@@ -79,7 +78,7 @@ public class PlayerMovement : MonoBehaviour, IPlayerComponent
 
         _playerVelocity = new Vector3(dir.x, RigidCompo.velocity.y, dir.z);
     }
-    
+
     // public void SetInAirMovement(Vector2 input)
     // {
     //     if (input.x > 0) RigidCompo.AddForce(new Vector3(0, airSpeed, 0) * Time.deltaTime);
@@ -91,8 +90,8 @@ public class PlayerMovement : MonoBehaviour, IPlayerComponent
     public void Jump()
     {
         if (isGround.Value == false) return;
-        
-        RigidCompo.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);  
+
+        RigidCompo.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
     }
 
     public void Dash()

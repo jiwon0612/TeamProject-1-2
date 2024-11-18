@@ -309,6 +309,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 946daa2fbe731ed4db6e2590501ef0a9,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 946daa2fbe731ed4db6e2590501ef0a9,
+        type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: db336b61aae80134e9772f48caebd621, type: 2}
@@ -402,6 +407,7 @@ MonoBehaviour:
   spring: 7
   damper: 4
   massScale: 4.5
+  animationTime: 4
   deshPower: 7
   OnDeshEvent:
     m_PersistentCalls:
@@ -656,7 +662,7 @@ Transform:
   m_GameObject: {fileID: 554654586}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.501}
+  m_LocalPosition: {x: -0.024, y: -0.041, z: 3.31}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1005,7 +1011,7 @@ Transform:
   m_GameObject: {fileID: 788275377}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.043, y: 0.961, z: 0.005}
+  m_LocalPosition: {x: -0.01, y: 0.652, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2218,12 +2224,12 @@ PrefabInstance:
     - target: {fileID: 895676188076992825, guid: 58acd0bdaa1affd44825ea2f96c3d2d4,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: 895676188076992825, guid: 58acd0bdaa1affd44825ea2f96c3d2d4,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: 895676188076992825, guid: 58acd0bdaa1affd44825ea2f96c3d2d4,
         type: 3}
@@ -2238,7 +2244,7 @@ PrefabInstance:
     - target: {fileID: 895676188076992825, guid: 58acd0bdaa1affd44825ea2f96c3d2d4,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 895676188076992825, guid: 58acd0bdaa1affd44825ea2f96c3d2d4,
         type: 3}
@@ -2263,17 +2269,17 @@ PrefabInstance:
     - target: {fileID: 6287497925371577986, guid: 58acd0bdaa1affd44825ea2f96c3d2d4,
         type: 3}
       propertyPath: boxSize.x
-      value: 0.4
+      value: 0.19
       objectReference: {fileID: 0}
     - target: {fileID: 6287497925371577986, guid: 58acd0bdaa1affd44825ea2f96c3d2d4,
         type: 3}
       propertyPath: boxSize.y
-      value: 2.65
+      value: 1.98
       objectReference: {fileID: 0}
     - target: {fileID: 6287497925371577986, guid: 58acd0bdaa1affd44825ea2f96c3d2d4,
         type: 3}
       propertyPath: boxSize.z
-      value: 0.46
+      value: 0.13
       objectReference: {fileID: 0}
     - target: {fileID: 6314646719526499660, guid: 58acd0bdaa1affd44825ea2f96c3d2d4,
         type: 3}
@@ -3622,11 +3628,12 @@ GameObject:
   - component: {fileID: 4117507041919969631}
   - component: {fileID: 8647465843397561812}
   - component: {fileID: 5839031126807434717}
-  - component: {fileID: 1529818876}
-  - component: {fileID: 1529818875}
   - component: {fileID: 8647465843397561815}
   - component: {fileID: 8647465843397561814}
+  - component: {fileID: 1529818876}
+  - component: {fileID: 1529818875}
   - component: {fileID: 8647465843397561816}
+  - component: {fileID: 8647465843397561817}
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
@@ -3748,6 +3755,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   xSeneitivity: 30
   ySeneitivity: 30
+--- !u!114 &8647465843397561817
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7635913438283986585}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a759836b9d80ca445aa494a5e51e0256, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 5
+  <CurretnHealth>k__BackingField: 0
+  OnHitEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDeathEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &8707273952449986108
 GameObject:
   m_ObjectHideFlags: 0

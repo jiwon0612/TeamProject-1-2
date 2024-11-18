@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2820884482389872562}
   - component: {fileID: 6433470845817052368}
   - component: {fileID: 2985608544947495112}
-  m_Layer: 7
+  m_Layer: 12
   m_Name: Bullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -149,3 +149,4 @@ MonoBehaviour:
   force: 15
   deadTime: 2
   poolName: Bullet
+  damage: 1

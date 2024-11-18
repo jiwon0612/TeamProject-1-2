@@ -26,6 +26,7 @@ public class Turret : MonoBehaviour, IHitable
 
     private bool _isCanShoot;
     private float _lastShootTime;
+    private bool _isDead;
 
 
     private void Awake()
@@ -33,9 +34,10 @@ public class Turret : MonoBehaviour, IHitable
         _turretLag = transform.Find("Lag");
         _turretBody = transform.Find("Body");
         //_turretPo = transform.Find("Po");
-
+        
+        _isDead = false;
         _turretAim = _turretPo.GetComponent<LineRenderer>();
-
+        
         Initialized();
     }
 
@@ -46,6 +48,8 @@ public class Turret : MonoBehaviour, IHitable
 
     private void Update()
     {
+        if (_isDead) return;
+        
         _isCanShoot = _lastShootTime < Time.time;
 
         DrawLine();
@@ -166,6 +170,7 @@ public class Turret : MonoBehaviour, IHitable
 
     public void Hit()
     {
+        this.enabled = false;
         _turretBody.parent = null;
         _turretLag.parent = null;
         _turretPo.parent = null;

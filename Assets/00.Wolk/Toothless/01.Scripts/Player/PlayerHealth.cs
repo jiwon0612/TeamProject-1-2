@@ -1,0 +1,38 @@
+using UnityEngine;
+using UnityEngine.Events;
+
+public class PlayerHealth : MonoBehaviour
+{
+    [SerializeField] private int maxHealth = 5;
+    [field : SerializeField] public int CurretnHealth { get; private set; }
+    public bool IsCanHit { get; private set; }
+
+    public UnityEvent OnHitEvent;
+    public UnityEvent OnDeathEvent;
+    
+
+    private void Awake()
+    {
+        CurretnHealth = maxHealth;
+        IsCanHit = true;
+    }
+
+    public bool TakeDamage(int damage)
+    {
+        if (IsCanHit == false) return false;
+        
+        CurretnHealth -= damage;
+        OnHitEvent.Invoke();
+        
+        if (CurretnHealth <= 0)
+            OnDeathEvent.Invoke();
+
+        return true;
+    }
+
+    public void Death()
+    {
+        IsCanHit = false;
+        OnDeathEvent.Invoke();
+    }
+}

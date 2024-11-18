@@ -6,6 +6,7 @@ public class Bullet : MonoBehaviour, IPoolable
     [SerializeField] private float force;
     [SerializeField] private float deadTime;
     [SerializeField] private string poolName;
+    [SerializeField] private int damage;
 
     public bool IsShooting { get; set; }
     
@@ -52,5 +53,15 @@ public class Bullet : MonoBehaviour, IPoolable
         IsShooting = false;
         _rigid.useGravity = false;
         timer = 0;
+    }
+
+    private void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.TryGetComponent(out PlayerHealth health))
+        {
+            health.TakeDamage(damage);
+        }
+        
+        Dead();
     }
 }
