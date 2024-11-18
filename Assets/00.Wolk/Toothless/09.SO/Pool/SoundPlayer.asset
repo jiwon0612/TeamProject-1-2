@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 098b45a024bfdb94f85230789ecaad40, type: 3}
   m_Name: SoundPlayer
   m_EditorClassIdentifier: 
-  poolName: 
-  prefab: {fileID: 0}
-  count: 0
+  poolName: SoundPlayer
+  prefab: {fileID: 8389165481804831021, guid: bc85bd765b935c245b53d53805de2a8c, type: 3}
+  count: 5
