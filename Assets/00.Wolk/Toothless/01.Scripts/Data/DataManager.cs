@@ -9,21 +9,20 @@ public class DataManager : MonoSingleton<DataManager>
 {
     [SerializeField] private string fileName = "SaveData";
     private string _path;
-
+    
     public StageData StageData { get; set; }
-
+    
     private void Awake()
     {
         _path = Application.persistentDataPath + $"/{fileName}.txt";
         Debug.Log(_path);
     }
-
+    
     private void Start()
     {
-        
         Initialized();
     }
-
+    
     private void Initialized(Action OnComplete = null)
     {
         FileInfo fi = new FileInfo(_path);
@@ -45,7 +44,7 @@ public class DataManager : MonoSingleton<DataManager>
         }
         OnComplete?.Invoke();
     }
-
+    
     public void SaveData()
     {
         try
@@ -62,7 +61,7 @@ public class DataManager : MonoSingleton<DataManager>
             Debug.Log(e.Message);
         }
     }
-
+    
     public StageData LoadData(bool isUpdate  = false)
     {
         try
@@ -90,4 +89,8 @@ public class StageData
     public bool Stage2 = false;
     public bool Stage3 = false;
     public bool Stage4 = false;
+    public bool Stage5 = false;
+    public bool Stage6 = false;
+    public bool Stage7 = false;
+    public bool Stage8 = false;
 }

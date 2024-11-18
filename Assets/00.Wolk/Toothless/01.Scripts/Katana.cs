@@ -8,7 +8,7 @@ public class Katana : MonoBehaviour, IPlayerComponent
     [SerializeField] private Material _sliceMaterial;
     [SerializeField] private Vector3 boxSize;
     [SerializeField] private Transform center;
-    [SerializeField] private int maxColliderCount = 5;
+    [SerializeField] private int maxColliderCount = 15;
     [SerializeField] private Transform _normalPoint;
 
     public UnityEvent OnHitEvent;
@@ -42,8 +42,7 @@ public class Katana : MonoBehaviour, IPlayerComponent
     {
         if (_isAttack)
         {
-            int cnt = Physics.OverlapBoxNonAlloc(center.position, boxSize, _collider, transform.rotation,
-                _whatIsTarget);
+            _collider = Physics.OverlapBox(center.position, boxSize, Quaternion.identity, _whatIsTarget);
         }
     }
 
@@ -83,12 +82,16 @@ public class Katana : MonoBehaviour, IPlayerComponent
 
     public void StartAttack()
     {
+        _isAttack = true;
+        _collider = Physics.OverlapBox(center.position, boxSize, Quaternion.identity, _whatIsTarget);
+        
+        
     }
 
-    private void OnCollisionExit(Collision other)
+    public void EndAttack()
     {
-        if (_fi)
-            _fi = false;
+        _isAttack = false;
+        
     }
 
     private void OnDrawGizmos()
@@ -97,7 +100,7 @@ public class Katana : MonoBehaviour, IPlayerComponent
         {
             Gizmos.color = Color.cyan;
             Gizmos.matrix = center.localToWorldMatrix;
-            Gizmos.DrawWireCube(center.localPosition, boxSize);
+            Gizmos.DrawWireCube(Vector3.zero, boxSize);
             Gizmos.color = Color.white;
         }
     }

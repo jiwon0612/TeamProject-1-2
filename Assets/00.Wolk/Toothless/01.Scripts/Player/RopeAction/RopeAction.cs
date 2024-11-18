@@ -41,6 +41,7 @@ public class RopeAction : MonoBehaviour, IPlayerComponent
 
     public bool IsSwhinging { get; private set; }
     public bool IsTryGrapple { get; private set; }
+    public bool IsCanShoot { get; set; }
 
     public void Initialize(Player player)
     {
@@ -48,12 +49,15 @@ public class RopeAction : MonoBehaviour, IPlayerComponent
         _line = GetComponent<LineRenderer>();
         _cam = Camera.main.transform;
         _rigid = _player.GetComp<PlayerMovement>().RigidCompo;
+        IsCanShoot = true;
 
         _player.InputCompo.OnShootEvent += HandleShootEvent;
     }
 
     private void HandleShootEvent(bool isShooting)
     {
+        if (!IsCanShoot) return;
+        
         if (isShooting)
             TryToShootGrapple();
         else

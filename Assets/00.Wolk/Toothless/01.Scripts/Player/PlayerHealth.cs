@@ -4,7 +4,7 @@ using UnityEngine.Events;
 public class PlayerHealth : MonoBehaviour
 {
     [SerializeField] private int maxHealth = 5;
-    [field : SerializeField] public int CurretnHealth { get; private set; }
+    public int CurretnHealth { get; private set; }
     public bool IsCanHit { get; private set; }
 
     public UnityEvent OnHitEvent;
