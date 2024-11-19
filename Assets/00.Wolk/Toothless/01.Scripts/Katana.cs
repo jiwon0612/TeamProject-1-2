@@ -45,8 +45,6 @@ public class Katana : MonoBehaviour, IPlayerComponent
                 ContactPoint point = collision.contacts[0];
                 Vector3 hitPoint = point.point;
 
-                Debug.Log(point.normal);
-
                 Vector3 normal = (_normalPoint.position - transform.position);
 
                 //GameObject[] objects = ObjectCut.Slicer(collision.gameObject,normal, hitPoint, _sliceMaterial);

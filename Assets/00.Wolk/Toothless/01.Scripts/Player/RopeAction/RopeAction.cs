@@ -1,6 +1,8 @@
 using System;
+using BehaviorDesigner.Runtime.Tasks.Unity.UnityCharacterController;
 using UnityEngine;
 using Unity.VisualScripting;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 
@@ -17,6 +19,15 @@ public class RopeAction : MonoBehaviour, IPlayerComponent
     [SerializeField] private Transform gunTip;
     [SerializeField] private float _maxDistance;
     private Transform _cam;
+
+    [Header("GrappleingSetting")] 
+    [SerializeField] private float spring;
+    [SerializeField] private float damper;
+    [SerializeField] private float massScale;
+    
+    [Header("DeshSetting")]
+    [SerializeField] private float deshPower;
+    public UnityEvent OnDeshEvent;
 
     public SpringJoint Joint { get; private set; }
     private Player _player;
@@ -59,9 +70,9 @@ public class RopeAction : MonoBehaviour, IPlayerComponent
             Joint.maxDistance = distance * 0.8f;
             Joint.minDistance = distance * 0.25f;
 
-            Joint.spring = 4.5f;
-            Joint.damper = 7f;
-            Joint.massScale = 4.5f;
+            Joint.spring = spring;
+            Joint.damper = damper;
+            Joint.massScale = massScale;
 
             _line.positionCount = 2;
         }
@@ -81,7 +92,9 @@ public class RopeAction : MonoBehaviour, IPlayerComponent
     private void DrawGrapple()
     {
         if (!Joint) return;
-
+        
+        
+        
         _line.SetPosition(0, gunTip.position);
         _line.SetPosition(1, _grapplePoint);
     }
@@ -116,7 +129,6 @@ public class RopeAction : MonoBehaviour, IPlayerComponent
 
         if (Keyboard.current.spaceKey.isPressed)
         {
-            Debug.Log("엄제유");
             Vector3 directionPoint = GetGrapplePoint() - transform.position;
             _rigid.AddForce(directionPoint.normalized * extendCableSpeed);
             
@@ -125,5 +137,11 @@ public class RopeAction : MonoBehaviour, IPlayerComponent
             Joint.maxDistance = distanceFromPoint * 0.75f;
             Joint.minDistance = distanceFromPoint * 0.25f;
         }
+    }
+
+    public void RopeDash(Vector3 dir)
+    {   
+        _rigid.AddForce(new Vector3(dir.x, 0, dir.z) * deshPower, ForceMode.Impulse);
+        OnDeshEvent?.Invoke();
     }
 }
