@@ -11,6 +11,10 @@ public class CamEffect : MonoBehaviour
     [SerializeField] private float dashIntensity = -0.9f;
     [SerializeField] private float dashTime = 0.2f;
 
+    [Header("ShakeSetting")] 
+    [SerializeField] private float shakeForce;
+    [SerializeField] private float shakeDuration;
+
     private Camera _mainCam;
 
     private void Awake()
@@ -33,5 +37,10 @@ public class CamEffect : MonoBehaviour
                 DOTween.To(() => depth.focalLength.value, x => depth.focalLength.value = x, 0, dashTime);
             }
         }
+    }
+
+    public void CameraShaking()
+    {
+        _mainCam.DOShakePosition(shakeDuration, shakeForce);
     }
 }

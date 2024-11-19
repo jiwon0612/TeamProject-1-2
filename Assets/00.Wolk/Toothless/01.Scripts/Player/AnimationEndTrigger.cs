@@ -14,7 +14,7 @@ public class AnimationEndTrigger : MonoBehaviour, IPlayerComponent
 
         OnAnimationPlaying = new NotifyValue<bool>();
     }
-
+    
     public void StartAnimation()
     {
         OnAnimationPlaying.Value = true;

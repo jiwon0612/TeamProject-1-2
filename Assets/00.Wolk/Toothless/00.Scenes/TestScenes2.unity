@@ -123,6 +123,18 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!114 &53225247 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 962931806341463772, guid: 072b6a330c27fa34f907d062a0213a03,
+    type: 3}
+  m_PrefabInstance: {fileID: 1602566938199025126}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc68fb56534d59848b312d1ecbb851e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &142698746
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2135,7 +2147,7 @@ Transform:
   m_GameObject: {fileID: 1502877291234373475}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.0050913147, y: -0.10833683, z: 0.0023308992}
+  m_LocalPosition: {x: -0.0050913147, y: -0.092, z: 0.0023308992}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2351,6 +2363,56 @@ PrefabInstance:
       propertyPath: volume
       value: 
       objectReference: {fileID: 1118820654}
+    - target: {fileID: 962931806341463772, guid: 072b6a330c27fa34f907d062a0213a03,
+        type: 3}
+      propertyPath: shakeForce
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 962931806341463772, guid: 072b6a330c27fa34f907d062a0213a03,
+        type: 3}
+      propertyPath: shakeDuration
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 2033868802387197793, guid: 072b6a330c27fa34f907d062a0213a03,
+        type: 3}
+      propertyPath: OnHitEvent.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2033868802387197793, guid: 072b6a330c27fa34f907d062a0213a03,
+        type: 3}
+      propertyPath: OnHitEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2033868802387197793, guid: 072b6a330c27fa34f907d062a0213a03,
+        type: 3}
+      propertyPath: OnHitEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 53225247}
+    - target: {fileID: 2033868802387197793, guid: 072b6a330c27fa34f907d062a0213a03,
+        type: 3}
+      propertyPath: OnHitEvent.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2033868802387197793, guid: 072b6a330c27fa34f907d062a0213a03,
+        type: 3}
+      propertyPath: OnHitEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: CameraShaking
+      objectReference: {fileID: 0}
+    - target: {fileID: 2033868802387197793, guid: 072b6a330c27fa34f907d062a0213a03,
+        type: 3}
+      propertyPath: OnHitEvent.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: CamEffect, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 2033868802387197793, guid: 072b6a330c27fa34f907d062a0213a03,
+        type: 3}
+      propertyPath: OnHitEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 2169205937435508857, guid: 072b6a330c27fa34f907d062a0213a03,
+        type: 3}
+      propertyPath: m_Name
+      value: HitParticle
+      objectReference: {fileID: 0}
     - target: {fileID: 4630677875860453701, guid: 072b6a330c27fa34f907d062a0213a03,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2405,6 +2467,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 7372474052405857353, guid: 072b6a330c27fa34f907d062a0213a03,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2463,7 +2530,7 @@ Transform:
   m_GameObject: {fileID: 6014503084011515501}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.038648035, y: 1.0515654, z: 0.5852822}
+  m_LocalPosition: {x: 0.038648035, y: 1.0515654, z: 0.716}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

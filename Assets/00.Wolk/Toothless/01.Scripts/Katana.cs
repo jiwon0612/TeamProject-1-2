@@ -84,8 +84,19 @@ public class Katana : MonoBehaviour, IPlayerComponent
     {
         _isAttack = true;
         _collider = Physics.OverlapBox(center.position, boxSize, Quaternion.identity, _whatIsTarget);
-        
-        
+
+        for (int i = 0; i < _collider.Length; i++)
+        {
+            if (_collider[i].TryGetComponent(out IHitable hitable))
+            {
+                EffectPlayer hitEffect = PoolManager.Instance.Pop("HitEffect") as EffectPlayer;
+                
+                hitEffect.SetPositionAndPlay(_collider[i].ClosestPointOnBounds(center.position));
+                hitable.Hit();
+                OnHitEvent?.Invoke();
+                Debug.Log(_collider[i].name);
+            }
+        }
     }
 
     public void EndAttack()

@@ -6,6 +6,7 @@ public class PlayerAttack : MonoBehaviour, IPlayerComponent
     
     private Player _player;
     private bool _isComboAtk;
+    private Katana _katana;
     
     private readonly int _atkHash = Animator.StringToHash("IsAtk");
     
@@ -14,6 +15,7 @@ public class PlayerAttack : MonoBehaviour, IPlayerComponent
         _player = player;
         
         _animator = GetComponent<Animator>();
+        _katana = _player.GetComp<Katana>();
         _player.InputCompo.OnAttackEvent += ComboAttack;
     }
 
@@ -28,5 +30,8 @@ public class PlayerAttack : MonoBehaviour, IPlayerComponent
         _animator.SetTrigger(_atkHash);
     }
 
-   
+    public void Attack()
+    {
+        _katana.StartAttack();
+    }
 }

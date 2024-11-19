@@ -8,6 +8,13 @@ using UnityEngine.Events;
 
 public class Turret : MonoBehaviour, IHitable
 {
+    public struct Parts
+    {
+        public Transform parts;
+        public Rigidbody rigidbody;
+        public MeshCollider meshCollider;
+    }
+    
     [Header("TurretSetting")] [SerializeField]
     private float turretSearchRange;
 
@@ -21,6 +28,8 @@ public class Turret : MonoBehaviour, IHitable
     private Transform _turretLag;
     private Transform _turretBody;
     [SerializeField] private Transform _turretPo;
+
+    private List<Parts> _partsList;
 
     private LineRenderer _turretAim;
 
@@ -37,13 +46,17 @@ public class Turret : MonoBehaviour, IHitable
         
         _isDead = false;
         _turretAim = _turretPo.GetComponent<LineRenderer>();
-        
         Initialized();
     }
 
     private void Initialized()
     {
         _turretAim.positionCount = 2;
+        
+        _partsList = new List<Parts>();
+        _partsList.Add(new Parts() { parts = _turretLag, rigidbody = _turretLag.GetComponent<Rigidbody>(), meshCollider = _turretLag.GetComponent<MeshCollider>() });
+        _partsList.Add(new Parts(){parts = _turretBody, rigidbody = _turretBody.GetComponent<Rigidbody>(), meshCollider = _turretBody.GetComponent<MeshCollider>() });
+        _partsList.Add(new Parts() {parts = _turretPo, rigidbody = _turretPo.GetComponent<Rigidbody>(), meshCollider = _turretPo.GetComponent<MeshCollider>() });
     }
 
     private void Update()
@@ -171,8 +184,13 @@ public class Turret : MonoBehaviour, IHitable
     public void Hit()
     {
         this.enabled = false;
-        _turretBody.parent = null;
-        _turretLag.parent = null;
-        _turretPo.parent = null;
+        foreach (Parts item in _partsList)
+        {
+            item.parts.parent = null;
+            item.rigidbody.useGravity = true;
+            item.rigidbody.isKinematic = false;
+            item.meshCollider.enabled = true;
+        }
+        Destroy(gameObject);
     }
 }
