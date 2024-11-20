@@ -2463,6 +2463,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5917178987725743330, guid: 072b6a330c27fa34f907d062a0213a03,
+        type: 3}
+      propertyPath: m_Parameters.colorGradient.m_ColorSpace
+      value: -1
+      objectReference: {fileID: 0}
     - target: {fileID: 6646648278143372549, guid: 072b6a330c27fa34f907d062a0213a03,
         type: 3}
       propertyPath: m_Name
@@ -2472,6 +2477,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7954167493439324239, guid: 072b6a330c27fa34f907d062a0213a03,
+        type: 3}
+      propertyPath: dashPower
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7954167493439324239, guid: 072b6a330c27fa34f907d062a0213a03,
+        type: 3}
+      propertyPath: dashCoolTime
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

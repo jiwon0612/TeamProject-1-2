@@ -96,10 +96,9 @@ public class PlayerMovement : MonoBehaviour, IPlayerComponent
 
     public void Dash()
     {
-        if (!isGround.Value && _rope.IsSwhinging)
+        if (_rope.IsSwhinging)
         {
             _rope.RopeDash(transform.forward);
-            Debug.Log(10);
         }
     }
 

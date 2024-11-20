@@ -476,6 +476,8 @@ MonoBehaviour:
   volume: {fileID: 0}
   dashIntensity: -0.9
   dashTime: 1
+  shakeForce: 0
+  shakeDuration: 0
 --- !u!114 &1690285843487580419
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -819,7 +821,8 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 4150475893531067910, guid: 58acd0bdaa1affd44825ea2f96c3d2d4, type: 3}
     - {fileID: 1753626023597999949, guid: 58acd0bdaa1affd44825ea2f96c3d2d4, type: 3}
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 6152761121054783898, guid: 58acd0bdaa1affd44825ea2f96c3d2d4, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 895676188076992825, guid: 58acd0bdaa1affd44825ea2f96c3d2d4,
         type: 3}

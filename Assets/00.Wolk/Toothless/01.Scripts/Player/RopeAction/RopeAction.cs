@@ -29,8 +29,9 @@ public class RopeAction : MonoBehaviour, IPlayerComponent
     [SerializeField] private float massScale;
     [SerializeField] private float animationTime;
 
-    [Header("DeshSetting")] [SerializeField]
-    private float deshPower;
+    [Header("DashSetting")] [SerializeField]
+    private float dashPower;
+    [SerializeField] private float dashCoolTime;
 
     public UnityEvent OnDeshEvent;
 
@@ -38,6 +39,8 @@ public class RopeAction : MonoBehaviour, IPlayerComponent
     private Player _player;
     private Rigidbody _rigid;
     private Coroutine _animationCoroutine;
+    private float _dashTimer;
+    private bool _isDashCoolTime;
 
     public bool IsSwhinging { get; private set; }
     public bool IsTryGrapple { get; private set; }
@@ -50,6 +53,7 @@ public class RopeAction : MonoBehaviour, IPlayerComponent
         _cam = Camera.main.transform;
         _rigid = _player.GetComp<PlayerMovement>().RigidCompo;
         IsCanShoot = true;
+        _isDashCoolTime = false;
 
         _player.InputCompo.OnShootEvent += HandleShootEvent;
     }
@@ -126,6 +130,20 @@ public class RopeAction : MonoBehaviour, IPlayerComponent
 
     }
 
+    private void Update()
+    {
+        if (_isDashCoolTime)
+        {
+            _dashTimer += Time.deltaTime;
+            if (_dashTimer >= dashCoolTime)
+            {
+                Debug.Log("초기화");
+                _isDashCoolTime = false;
+                _dashTimer = 0f;
+            }
+        }
+    }
+
     private void FixedUpdate()
     {
         if (IsSwhinging)
@@ -166,13 +184,7 @@ public class RopeAction : MonoBehaviour, IPlayerComponent
         if (input.x < 0) _rigid.AddForce(-_player.transform.right * horizontalForce * Time.deltaTime);
 
         if (input.y > 0) _rigid.AddForce(_player.transform.forward * forwardForce * Time.deltaTime);
-        if (input.y < 0)
-        {
-            float extendedDistance = Vector3.Distance(transform.position, GetGrapplePoint()) + extendCableSpeed;
-
-            Joint.maxDistance = extendedDistance * 1.2f;
-            Joint.minDistance = extendedDistance * 0.85f;
-        }
+        if (input.y < 0) _rigid.AddForce(-_player.transform.forward * forwardForce * Time.deltaTime);
 
         if (Keyboard.current.spaceKey.isPressed)
         {
@@ -188,7 +200,10 @@ public class RopeAction : MonoBehaviour, IPlayerComponent
 
     public void RopeDash(Vector3 dir)
     {
-        _rigid.AddForce(new Vector3(dir.x, 0, dir.z) * deshPower, ForceMode.Impulse);
+        if (_isDashCoolTime) return;
+        
+        _isDashCoolTime = true;
+        _rigid.AddForce(new Vector3(dir.x, 0, dir.z) * dashPower, ForceMode.Impulse);
         OnDeshEvent?.Invoke();
     }
 }
