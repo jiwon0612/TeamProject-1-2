@@ -9,11 +9,6 @@ public class AudioManager : MonoSingleton<AudioManager>
     [SerializeField] private AudioMixer audioMixer;
     [SerializeField] private AudioMixerGroup _bgmGroup;
     [SerializeField] private AudioMixerGroup _sfxGroup;
-    
-    private void Awake()
-    {
-        Debug.Log(_bgmGroup.name);
-    }
 
     public void SetSFXVolume(float volume)
     {

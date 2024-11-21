@@ -181,6 +181,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8391222552659086748, guid: 9ea0cdf038f03cd4fbd0f9fd87992513,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: -7910539345509173323, guid: 9ea0cdf038f03cd4fbd0f9fd87992513,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -484,6 +489,11 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 1374195562}
+    - target: {fileID: 4653162034374695819, guid: 57cd8f15e1cb55043927bbf28e2e3b02,
+        type: 3}
+      propertyPath: _isCanRope
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6388754595508552035, guid: 57cd8f15e1cb55043927bbf28e2e3b02,
         type: 3}
       propertyPath: m_Name

@@ -20,6 +20,7 @@ public class Katana : MonoBehaviour, IPlayerComponent
 
     private bool _fi = false;
     private bool _isAttack;
+    private Vector3 _normal;
 
     public void Initialize(Player player)
     {
@@ -28,12 +29,13 @@ public class Katana : MonoBehaviour, IPlayerComponent
         _trail = GetComponentInChildren<TrailRenderer>();
         _collider = new Collider[maxColliderCount];
 
-        _animaTrigger.OnAnimationPlaying.OnValueChanged += HandleEffectPaly;
+        _animaTrigger.OnAnimationPlaying.OnValueChanged += HandleEffectPlay;
         _trail.emitting = false;
         _isAttack = false;
+        _normal = _normalPoint.position - transform.position;
     }
 
-    private void HandleEffectPaly(bool prev, bool next)
+    private void HandleEffectPlay(bool prev, bool next)
     {
         _trail.emitting = next;
     }
@@ -89,10 +91,35 @@ public class Katana : MonoBehaviour, IPlayerComponent
         {
             if (_collider[i].TryGetComponent(out IHitable hitable))
             {
+                Vector3 hitPoint = _collider[i].ClosestPointOnBounds(center.position);
+                
                 EffectPlayer hitEffect = PoolManager.Instance.Pop("HitEffect") as EffectPlayer;
                 
-                hitEffect.SetPositionAndPlay(_collider[i].ClosestPointOnBounds(center.position));
-                hitable.Hit();
+                hitEffect.SetPositionAndPlay(hitPoint);
+                Transform[] obj = hitable.Hit();
+                float minDist = Vector3.Distance(hitPoint, obj[0].position);
+                int minIndex = 0;
+                for (int j = 1; j < obj.Length; j++)
+                {
+                    //Debug.Log(obj[j].name);
+                    float dis = Vector3.Distance(hitPoint, obj[j].position);
+                    if (dis < minDist)
+                    {
+                        minDist = dis;
+                        minIndex = j;
+                    }
+                }
+                GameObject[] cutObjs = MeshCut.Cut(obj[minIndex].gameObject, hitPoint,_normal, _sliceMaterial);
+                cutObjs[1].transform.position = cutObjs[0].transform.position;
+                cutObjs[1].transform.rotation = cutObjs[0].transform.rotation;
+                cutObjs[1].transform.localScale = cutObjs[0].transform.localScale;
+                cutObjs[1].gameObject.layer = cutObjs[0].gameObject.layer;
+                
+                cutObjs[1].gameObject.AddComponent<Rigidbody>();
+                MeshCollider meshColl = cutObjs[1].gameObject.AddComponent<MeshCollider>();
+                
+                meshColl.convex = true;
+                
                 OnHitEvent?.Invoke();
                 Debug.Log(_collider[i].name);
             }

@@ -183,6 +183,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83edbaf697760ad4d992bd964171efdf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isCanRope: 1
   player: {fileID: 0}
 --- !u!1 &6388754595508552035
 GameObject:

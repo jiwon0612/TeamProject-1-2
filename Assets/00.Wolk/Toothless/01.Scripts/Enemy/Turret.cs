@@ -181,16 +181,21 @@ public class Turret : MonoBehaviour, IHitable
         Gizmos.color = Color.white;
     }
 
-    public void Hit()
+    public Transform[] Hit()
     {
         this.enabled = false;
-        foreach (Parts item in _partsList)
+        _turretAim.positionCount = 0;
+        Transform[] parts = new Transform[_partsList.Count];
+        for (int i = 0; i < _partsList.Count; i++)
         {
-            item.parts.parent = null;
-            item.rigidbody.useGravity = true;
-            item.rigidbody.isKinematic = false;
-            item.meshCollider.enabled = true;
+            _partsList[i].parts.parent = null;
+            _partsList[i].rigidbody.useGravity = true;
+            _partsList[i].rigidbody.isKinematic = false;
+            _partsList[i].meshCollider.enabled = true;
+            parts[i] = _partsList[i].parts;
         }
+        
         Destroy(gameObject);
+        return parts;
     }
 }
