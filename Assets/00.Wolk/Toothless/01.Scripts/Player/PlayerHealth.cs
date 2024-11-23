@@ -7,7 +7,7 @@ public class PlayerHealth : MonoBehaviour
     public int CurretnHealth { get; private set; }
     public bool IsCanHit { get; private set; }
 
-    public UnityEvent OnHitEvent;
+    public UnityEvent<float> OnHitEvent;
     public UnityEvent OnDeathEvent;
     
 
@@ -22,7 +22,7 @@ public class PlayerHealth : MonoBehaviour
         if (IsCanHit == false) return false;
         
         CurretnHealth -= damage;
-        OnHitEvent.Invoke();
+        OnHitEvent.Invoke((float)CurretnHealth / maxHealth);
         
         if (CurretnHealth <= 0)
             OnDeathEvent.Invoke();

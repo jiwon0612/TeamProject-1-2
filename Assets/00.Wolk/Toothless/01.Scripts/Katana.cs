@@ -33,7 +33,7 @@ public class Katana : MonoBehaviour, IPlayerComponent
         _animaTrigger.OnAnimationPlaying.OnValueChanged += HandleEffectPlay;
         _trail.emitting = false;
         _isAttack = false;
-        _normal = _normalPoint.position - transform.position;
+        
     }
 
     private void HandleEffectPlay(bool prev, bool next)
@@ -87,6 +87,7 @@ public class Katana : MonoBehaviour, IPlayerComponent
     {
         _isAttack = true;
         _collider = Physics.OverlapBox(center.position, boxSize, Quaternion.identity, _whatIsTarget);
+        _normal = _normalPoint.position - transform.position;
         
         for (int i = 0; i < _collider.Length; i++)
         {
@@ -114,7 +115,9 @@ public class Katana : MonoBehaviour, IPlayerComponent
                 try
                 {
                     GameObject[] cutObjs = MeshCut.Cut(obj[minIndex].gameObject, hitPoint,_normal, _sliceMaterial);
-                    cutObjs[0].GetComponent<MeshCollider>().sharedMesh = cutObjs[0].GetComponent<MeshFilter>().mesh;
+                    MeshCollider mesCol = cutObjs[0].GetComponent<MeshCollider>();
+                    mesCol.sharedMesh = cutObjs[0].GetComponent<MeshFilter>().mesh;
+                    mesCol.material = slicePhysicMaterial;
                 
                     cutObjs[1].transform.position = cutObjs[0].transform.position;
                     cutObjs[1].transform.rotation = cutObjs[0].transform.rotation;
@@ -134,10 +137,7 @@ public class Katana : MonoBehaviour, IPlayerComponent
                     Debug.Log("까비");
                 }
                 
-                
-                
                 OnHitEvent?.Invoke();
-                Debug.Log(_collider[i].name);
             }
         }
     }

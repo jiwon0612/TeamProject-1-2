@@ -34,6 +34,7 @@ public class RopeAction : MonoBehaviour, IPlayerComponent
     [SerializeField] private float dashCoolTime;
 
     public UnityEvent OnDeshEvent;
+    public UnityEvent<float> OnDashCollTimeEvent;
 
     public SpringJoint Joint { get; private set; }
     private Player _player;
@@ -135,6 +136,7 @@ public class RopeAction : MonoBehaviour, IPlayerComponent
         if (_isDashCoolTime)
         {
             _dashTimer += Time.deltaTime;
+            OnDashCollTimeEvent?.Invoke(_dashTimer / dashCoolTime);
             if (_dashTimer >= dashCoolTime)
             {
                 Debug.Log("초기화");
