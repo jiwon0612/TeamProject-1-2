@@ -6,6 +6,7 @@ public class Katana : MonoBehaviour, IPlayerComponent
 {
     [SerializeField] private LayerMask _whatIsTarget;
     [SerializeField] private Material _sliceMaterial;
+    [SerializeField] private PhysicMaterial slicePhysicMaterial;
     [SerializeField] private Vector3 boxSize;
     [SerializeField] private Transform center;
     [SerializeField] private int maxColliderCount = 15;
@@ -86,7 +87,7 @@ public class Katana : MonoBehaviour, IPlayerComponent
     {
         _isAttack = true;
         _collider = Physics.OverlapBox(center.position, boxSize, Quaternion.identity, _whatIsTarget);
-
+        
         for (int i = 0; i < _collider.Length; i++)
         {
             if (_collider[i].TryGetComponent(out IHitable hitable))
@@ -109,16 +110,31 @@ public class Katana : MonoBehaviour, IPlayerComponent
                         minIndex = j;
                     }
                 }
-                GameObject[] cutObjs = MeshCut.Cut(obj[minIndex].gameObject, hitPoint,_normal, _sliceMaterial);
-                cutObjs[1].transform.position = cutObjs[0].transform.position;
-                cutObjs[1].transform.rotation = cutObjs[0].transform.rotation;
-                cutObjs[1].transform.localScale = cutObjs[0].transform.localScale;
-                cutObjs[1].gameObject.layer = cutObjs[0].gameObject.layer;
+
+                try
+                {
+                    GameObject[] cutObjs = MeshCut.Cut(obj[minIndex].gameObject, hitPoint,_normal, _sliceMaterial);
+                    cutObjs[0].GetComponent<MeshCollider>().sharedMesh = cutObjs[0].GetComponent<MeshFilter>().mesh;
                 
-                cutObjs[1].gameObject.AddComponent<Rigidbody>();
-                MeshCollider meshColl = cutObjs[1].gameObject.AddComponent<MeshCollider>();
+                    cutObjs[1].transform.position = cutObjs[0].transform.position;
+                    cutObjs[1].transform.rotation = cutObjs[0].transform.rotation;
+                    cutObjs[1].transform.localScale = cutObjs[0].transform.localScale;
+                    cutObjs[1].gameObject.layer = cutObjs[0].gameObject.layer;
                 
-                meshColl.convex = true;
+                    cutObjs[1].gameObject.AddComponent<Rigidbody>();
+                    //rigi.AddForce(_normal * 10, ForceMode.Impulse);
+                    cutObjs[0].GetComponent<Rigidbody>().AddForce(-_normal * 5, ForceMode.Impulse);
+                    MeshCollider meshColl = cutObjs[1].gameObject.AddComponent<MeshCollider>();
+                    
+                    meshColl.convex = true;
+                    meshColl.material = slicePhysicMaterial;
+                }
+                catch (Exception e)
+                {
+                    Debug.Log("까비");
+                }
+                
+                
                 
                 OnHitEvent?.Invoke();
                 Debug.Log(_collider[i].name);

@@ -23,7 +23,7 @@ public class DataManager : MonoSingleton<DataManager>
         Initialized();
     }
     
-    private void Initialized(Action OnComplete = null)
+    public void Initialized(Action OnComplete = null)
     {
         FileInfo fi = new FileInfo(_path);
         if (fi.Exists)
@@ -90,7 +90,8 @@ public class StageData
     public bool Stage3 = false;
     public bool Stage4 = false;
     public bool Stage5 = false;
-    public bool Stage6 = false;
-    public bool Stage7 = false;
-    public bool Stage8 = false;
+    
+    public float MasterVolume = 1;
+    public float SFXVolume = 1;
+    public float BGMVolume = 1;
 }

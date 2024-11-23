@@ -14,6 +14,7 @@ public class CamEffect : MonoBehaviour
     [Header("ShakeSetting")] 
     [SerializeField] private float shakeForce;
     [SerializeField] private float shakeDuration;
+    private Tween shakeTween;
 
     private Camera _mainCam;
 
@@ -41,6 +42,8 @@ public class CamEffect : MonoBehaviour
 
     public void CameraShaking()
     {
-        _mainCam.DOShakePosition(shakeDuration, shakeForce);
+        if (shakeTween.IsActive()) return;
+        
+        shakeTween = _mainCam.DOShakePosition(shakeDuration, shakeForce);
     }
 }
