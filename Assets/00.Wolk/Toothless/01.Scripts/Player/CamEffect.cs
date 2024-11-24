@@ -7,17 +7,20 @@ public class CamEffect : MonoBehaviour
 {
     [Header("PPSetting")] [SerializeField] private Volume volume;
 
-    [Header("DashEffect")] 
-    [SerializeField] private float dashIntensity = -0.9f;
+    [Header("DashEffect")] [SerializeField]
+    private float dashIntensity = -0.9f;
+
     [SerializeField] private float dashTime = 0.2f;
 
-    [Header("ShakeSetting")] 
-    [SerializeField] private float shakeForce;
+    [Header("ShakeSetting")] [SerializeField]
+    private float shakeForce;
+
     [SerializeField] private float shakeDuration;
     private Tween shakeTween;
 
-    [Header("CamEffect")] 
-    [SerializeField] private float fOV;
+    [Header("CamEffect")] [SerializeField] private float fOV;
+    [SerializeField] private float setSpeedValue;
+    [SerializeField] private float startFOV;
     private Camera _mainCam;
 
     private void Awake()
@@ -29,7 +32,7 @@ public class CamEffect : MonoBehaviour
     {
         LensDistortion lens;
         DepthOfField depth;
-        
+
         if (volume.profile.TryGet(out lens))
         {
             if (volume.profile.TryGet(out depth))
@@ -45,8 +48,13 @@ public class CamEffect : MonoBehaviour
     public void CameraShaking()
     {
         if (shakeTween.IsActive()) return;
-        
+
         shakeTween = _mainCam.DOShakePosition(shakeDuration, shakeForce);
-        
+    }
+
+    public void SetFOV(float speed)
+    {
+        if (speed < setSpeedValue) _mainCam.fieldOfView = startFOV;
+        else _mainCam.fieldOfView = speed - setSpeedValue + startFOV;
     }
 }

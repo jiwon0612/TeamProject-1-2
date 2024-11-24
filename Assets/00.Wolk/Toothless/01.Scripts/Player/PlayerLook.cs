@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class PlayerLook : MonoBehaviour, IPlayerComponent
@@ -6,6 +5,8 @@ public class PlayerLook : MonoBehaviour, IPlayerComponent
     [Header("Setting")] 
     [SerializeField] private float xSeneitivity = 30f;
     [SerializeField] private float ySeneitivity = 30f;
+    
+    public bool IsCantLook {get; set;}
     
     private Camera _cam;
     private float xRotation = 0f;
@@ -32,6 +33,7 @@ public class PlayerLook : MonoBehaviour, IPlayerComponent
 
     private void LateUpdate()
     {
-        SetPlayerLook(_player.InputCompo.MouseDir);
+        if (IsCantLook)
+            SetPlayerLook(_player.InputCompo.MouseDir);
     }
 }
