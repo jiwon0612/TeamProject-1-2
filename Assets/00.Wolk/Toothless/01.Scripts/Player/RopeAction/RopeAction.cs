@@ -79,7 +79,7 @@ public class RopeAction : MonoBehaviour, IPlayerComponent
         }
         else
         {
-            Vector3 dir = _cam.transform.position + _cam.forward * 15;
+            Vector3 dir = _cam.transform.position + _cam.forward * _maxDistance;
             _animationCoroutine = StartCoroutine(RopeAnimation(dir, () => StopGrapple()));
         }
     }

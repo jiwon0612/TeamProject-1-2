@@ -16,6 +16,8 @@ public class CamEffect : MonoBehaviour
     [SerializeField] private float shakeDuration;
     private Tween shakeTween;
 
+    [Header("CamEffect")] 
+    [SerializeField] private float fOV;
     private Camera _mainCam;
 
     private void Awake()
@@ -27,7 +29,7 @@ public class CamEffect : MonoBehaviour
     {
         LensDistortion lens;
         DepthOfField depth;
-
+        
         if (volume.profile.TryGet(out lens))
         {
             if (volume.profile.TryGet(out depth))
@@ -45,5 +47,6 @@ public class CamEffect : MonoBehaviour
         if (shakeTween.IsActive()) return;
         
         shakeTween = _mainCam.DOShakePosition(shakeDuration, shakeForce);
+        
     }
 }
