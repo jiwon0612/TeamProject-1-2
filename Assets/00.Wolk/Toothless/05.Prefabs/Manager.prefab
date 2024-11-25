@@ -90,6 +90,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioMixer: {fileID: 24100000, guid: a46eb990a22a8e948af816fbf6ca691b, type: 2}
+  masterGroup: {fileID: 24300002, guid: a46eb990a22a8e948af816fbf6ca691b, type: 2}
   _bgmGroup: {fileID: -6920474585510514305, guid: a46eb990a22a8e948af816fbf6ca691b,
     type: 2}
   _sfxGroup: {fileID: 4282415162001659339, guid: a46eb990a22a8e948af816fbf6ca691b,

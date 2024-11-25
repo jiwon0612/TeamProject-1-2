@@ -33,7 +33,7 @@ public class PlayerLook : MonoBehaviour, IPlayerComponent
 
     private void LateUpdate()
     {
-        if (IsCantLook)
+        if (!IsCantLook)
             SetPlayerLook(_player.InputCompo.MouseDir);
     }
 }

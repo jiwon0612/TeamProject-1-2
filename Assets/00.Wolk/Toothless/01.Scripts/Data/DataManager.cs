@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.IO;
+using Unity.VisualScripting;
 using Exception = System.Exception;
 
 public class DataManager : MonoSingleton<DataManager>
@@ -22,7 +23,13 @@ public class DataManager : MonoSingleton<DataManager>
     {
         Initialized();
     }
-    
+
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+        SaveData();
+    }
+
     public void Initialized(Action OnComplete = null)
     {
         FileInfo fi = new FileInfo(_path);
@@ -91,7 +98,7 @@ public class StageData
     public bool Stage4 = false;
     public bool Stage5 = false;
     
-    public float MasterVolume = 1;
-    public float SFXVolume = 1;
-    public float BGMVolume = 1;
+    public float MasterVolume = 0.5f;
+    public float SFXVolume = 0.5f;
+    public float BGMVolume = 0.5f;
 }

@@ -25,7 +25,7 @@ public class GameManager : MonoSingleton<GameManager>
         SetRope(_isCanRope);
     }
 
-    private void SetCurser(bool setting)
+    public void SetCurser(bool setting)
     {
         Cursor.visible = setting;
         Cursor.lockState = setting == true ? CursorLockMode.None : CursorLockMode.Locked;
@@ -48,7 +48,7 @@ public class GameManager : MonoSingleton<GameManager>
         }
     }
 
-    private void OnDrawGizmosSelected()
+    private void OnDrawGizmos()
     {
         if (zoonPoint == null) return;
         
