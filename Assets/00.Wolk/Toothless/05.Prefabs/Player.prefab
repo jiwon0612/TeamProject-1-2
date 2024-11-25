@@ -554,13 +554,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   horizontalForce: 200
   forwardForce: 300
-  extendCableSpeed: 15
+  extendCableSpeed: 5
   whatIsWall:
     serializedVersion: 2
     m_Bits: 64
   gunTip: {fileID: 5857880939699525299}
   _maxDistance: 100
-  spring: 7
+  spring: 5
   damper: 4
   massScale: 4.5
   animationTime: 4
@@ -942,7 +942,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6d8a044d28915e458af875115adc522, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 10
+  moveSpeed: 15
   swhingSpeed: 18
   airSpeed: 50
   groundCheck: {fileID: 1593598906629763022}

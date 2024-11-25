@@ -128,7 +128,7 @@ public class RopeAction : MonoBehaviour, IPlayerComponent
         float distance = Vector3.Distance(_player.transform.position, _grapplePoint);
 
         Joint.maxDistance = distance * 0.8f;
-        Joint.minDistance = distance * 0.25f;
+        Joint.minDistance = distance * 0.15f;
 
         Joint.spring = spring;
         Joint.damper = damper;
@@ -144,7 +144,6 @@ public class RopeAction : MonoBehaviour, IPlayerComponent
             OnDashCollTimeEvent?.Invoke(_dashTimer / dashCoolTime);
             if (_dashTimer >= dashCoolTime)
             {
-                Debug.Log("초기화");
                 _isDashCoolTime = false;
                 _dashTimer = 0f;
             }
@@ -197,12 +196,12 @@ public class RopeAction : MonoBehaviour, IPlayerComponent
         if (Keyboard.current.spaceKey.isPressed)
         {
             Vector3 directionPoint = GetGrapplePoint() - transform.position;
-            _rigid.AddForce(directionPoint.normalized * extendCableSpeed);
+            _rigid.AddForce(directionPoint.normalized * extendCableSpeed * Time.deltaTime);
 
             float distanceFromPoint = Vector3.Distance(transform.position, GetGrapplePoint());
 
-            Joint.maxDistance = distanceFromPoint * 0.75f;
-            Joint.minDistance = distanceFromPoint * 0.25f;
+            Joint.maxDistance = distanceFromPoint * 0.5f;
+            Joint.minDistance = distanceFromPoint * 0.1f;
         }
     }
 

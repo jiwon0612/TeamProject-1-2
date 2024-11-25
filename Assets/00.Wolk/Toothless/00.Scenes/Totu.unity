@@ -97,7 +97,8 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: 439b0b647a192d14c947117acabef96f,
+    type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -461,6 +462,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: -6478536213147159724, guid: 58f72820b7eb77c41940d84a83addabc,
         type: 3}
+    - target: {fileID: -102348019996040098, guid: 37acd9984729a3d4286c02beb23e61a0,
+        type: 3}
+      propertyPath: m_Name
+      value: Platform
+      objectReference: {fileID: 0}
     - target: {fileID: -102348019996040098, guid: 37acd9984729a3d4286c02beb23e61a0,
         type: 3}
       propertyPath: m_Layer
@@ -858,6 +864,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 2088849484}
+    - targetCorrespondingSourceObject: {fileID: -102348019996040098, guid: 37acd9984729a3d4286c02beb23e61a0,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2088849485}
     - targetCorrespondingSourceObject: {fileID: -8494441967054782989, guid: 37acd9984729a3d4286c02beb23e61a0,
         type: 3}
       insertIndex: -1
@@ -4157,6 +4167,31 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 3440720163504289490, guid: 37acd9984729a3d4286c02beb23e61a0, type: 3}
+--- !u!114 &2088849485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 54342856}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9816df8056777eb4daa4ee9db6e80454, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  whatIsTarget:
+    serializedVersion: 2
+    m_Bits: 256
+  setData:
+    Stage1: 1
+    Stage2: 0
+    Stage3: 0
+    Stage4: 0
+    Stage5: 0
+    MasterVolume: 0.5
+    SFXVolume: 0.5
+    BGMVolume: 0.5
+  number: 0
 --- !u!1 &2099586110
 GameObject:
   m_ObjectHideFlags: 0

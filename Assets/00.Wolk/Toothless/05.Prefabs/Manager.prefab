@@ -187,7 +187,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isCanRope: 1
-  isLockCursor: 1
+  isLockCursor: 0
   size: {x: 3.27, y: 0.83, z: 3.99}
   whatIsTarget:
     serializedVersion: 2

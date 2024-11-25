@@ -9,6 +9,7 @@ using UnityEngine.UI;
 public class SettingUI : MonoBehaviour
 {
     [SerializeField] private InputReader playerInput;
+    [SerializeField] private bool isTitle;
 
     private CanvasGroup _canvasGroup;
 
@@ -64,13 +65,14 @@ public class SettingUI : MonoBehaviour
         if (GameManager.Instance.player != null)
         {
             var look = GameManager.Instance.player.GetComp<PlayerLook>();
-            look.IsCantLook = false;
+            look.IsCantLook = true;
         }
-        
-        GameManager.Instance.SetCurser(true);
+        if(!isTitle)
+            GameManager.Instance.SetCurser(true);
 
         _canvasGroup.alpha = 1;
         _canvasGroup.interactable = true;
+        _canvasGroup.blocksRaycasts = true;
         _isActive = true;
 
         OnActiveChanged?.Invoke(_isActive);
@@ -81,13 +83,14 @@ public class SettingUI : MonoBehaviour
         if (GameManager.Instance.player != null)
         {
             var look = GameManager.Instance.player.GetComp<PlayerLook>();
-            look.IsCantLook = true;
+            look.IsCantLook = false;
         }
-
-        GameManager.Instance.SetCurser(false);
+        if (!isTitle)
+            GameManager.Instance.SetCurser(false);
         
         _canvasGroup.alpha = 0;
         _canvasGroup.interactable = false;
+        _canvasGroup.blocksRaycasts = false;
         _isActive = false;
         if (isSave)
             SaveVolumeValue();
@@ -104,9 +107,15 @@ public class SettingUI : MonoBehaviour
         _bgmSlider.value = data.BGMVolume;
     }
 
-    public void ClickExitBtn(int number)
+    public void ClickReturnBtn(int number)
     {
         SceneManager.LoadScene(number);
+    }
+
+    public void ClickExitQuitBtn()
+    {
+        Debug.Log("게임나가기");
+        Application.Quit();
     }
 
     public void SaveVolumeValue()

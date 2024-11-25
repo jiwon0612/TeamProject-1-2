@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.IO;
-using Unity.VisualScripting;
 using Exception = System.Exception;
 
 public class DataManager : MonoSingleton<DataManager>
@@ -90,12 +89,17 @@ public class DataManager : MonoSingleton<DataManager>
     }
 }
 
+[Serializable]
 public class StageData
 {
     public bool Stage1 = true;
+    
     public bool Stage2 = false;
+    
     public bool Stage3 = false;
+    
     public bool Stage4 = false;
+    
     public bool Stage5 = false;
     
     public float MasterVolume = 0.5f;

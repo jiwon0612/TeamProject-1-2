@@ -6,6 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: 99c9720ab356a0642a771bea13969a05
+    path: Assets/00.Wolk/MASNEO/00.Scenes/TestMainScene.unity
+    guid: f4dec6751c322e847ac7256a9e8863f5
+  - enabled: 1
+    path: Assets/00.Wolk/Toothless/00.Scenes/StageScene.unity
+    guid: 3a321ab2522dbd1469bbce5ff03edf61
+  - enabled: 1
+    path: Assets/00.Wolk/Toothless/00.Scenes/Totu.unity
+    guid: 86a345c89d4aac048b08762fa9bdf125
   m_configObjects: {}

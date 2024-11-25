@@ -4,9 +4,29 @@ using UnityEngine;
 using System;
 using TMPro;
 
+public struct TimeStruct
+{
+    public TimeStruct(float min, float sec, float mis)
+    {
+        Minutes = min;
+        Seconds = sec;
+        Milliseconds = mis;
+    }
+    
+    public float Minutes;
+    public float Seconds;
+    public float Milliseconds;
+}
+
 public class TimerUI : MonoBehaviour
 {
+
+
+    [Header("TimerSetting")] [SerializeField]
+    private bool isTutorial; 
+    
     private TextMeshProUGUI timerText;
+    private TextMeshProUGUI maxTimerText;
     
     private float _min;
     private float _sic;
@@ -16,6 +36,7 @@ public class TimerUI : MonoBehaviour
     private void Awake()
     {
         timerText = transform.Find("TimerInfo").GetComponent<TextMeshProUGUI>();
+        maxTimerText = transform.Find("MaxTimeInfo").GetComponent<TextMeshProUGUI>();
     }
 
     private void Update()
@@ -40,5 +61,15 @@ public class TimerUI : MonoBehaviour
         _min = 0;
         _sic = 0;
         _mSic = 0;
+    }
+
+    public void LoadMinTime()
+    {
+        //TimeStruct timeStruct = 
+    }
+
+    public void SaveMinTime()
+    {
+        
     }
 }
