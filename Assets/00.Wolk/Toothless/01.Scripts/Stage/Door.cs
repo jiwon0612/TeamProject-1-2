@@ -10,8 +10,7 @@ public class Door : MonoBehaviour
     {
         if (((1 << other.gameObject.layer) & whatIsTarget) != 0)
         {
-            Debug.Log(stageNumber);
-            //SceneManager.LoadScene(stageNumber);
+            SceneManager.LoadScene(stageNumber);    
         }
     }
 }
