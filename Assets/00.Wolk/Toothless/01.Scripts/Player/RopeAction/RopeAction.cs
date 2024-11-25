@@ -69,6 +69,11 @@ public class RopeAction : MonoBehaviour, IPlayerComponent
             StopGrapple();
     }
 
+    private void OnDisable()
+    {
+        _player.InputCompo.OnShootEvent -= HandleShootEvent;
+    }
+
     private void TryToShootGrapple()
     {
         RaycastHit hit;
@@ -79,7 +84,7 @@ public class RopeAction : MonoBehaviour, IPlayerComponent
         }
         else
         {
-            Vector3 dir = _cam.transform.position + _cam.forward * 15;
+            Vector3 dir = _cam.transform.position + _cam.forward * _maxDistance;
             _animationCoroutine = StartCoroutine(RopeAnimation(dir, () => StopGrapple()));
         }
     }
@@ -167,7 +172,8 @@ public class RopeAction : MonoBehaviour, IPlayerComponent
 
     private void StopGrapple()
     {
-        StopCoroutine(_animationCoroutine);
+        if (_animationCoroutine != null)
+            StopCoroutine(_animationCoroutine);
         IsSwhinging = false;
         _line.positionCount = 0;
         Destroy(Joint);
