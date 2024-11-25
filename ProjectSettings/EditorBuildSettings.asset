@@ -14,4 +14,19 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/00.Wolk/Toothless/00.Scenes/Totu.unity
     guid: 86a345c89d4aac048b08762fa9bdf125
+  - enabled: 1
+    path: Assets/00.Wolk/Toothless/00.Scenes/Stage/1Stage.unity
+    guid: 28b49a569f78b214087231bf800be50c
+  - enabled: 1
+    path: Assets/00.Wolk/Toothless/00.Scenes/Stage/2Stage.unity
+    guid: fef045fd762d6844badead191070dce3
+  - enabled: 1
+    path: Assets/00.Wolk/Toothless/00.Scenes/Stage/3Stage.unity
+    guid: 55a130bd5a6d1274ab14f6b7706dfc3f
+  - enabled: 1
+    path: Assets/00.Wolk/Toothless/00.Scenes/Stage/4Stage.unity
+    guid: 55805ce55a1ca644c91d9c3fe84c2ff2
+  - enabled: 1
+    path: Assets/00.Wolk/Toothless/00.Scenes/Stage/5Stage.unity
+    guid: bc19226eb006ade4aa5e541be3619a95
   m_configObjects: {}

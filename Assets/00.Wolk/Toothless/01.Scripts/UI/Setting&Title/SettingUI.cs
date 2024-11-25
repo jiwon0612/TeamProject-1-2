@@ -29,18 +29,18 @@ public class SettingUI : MonoBehaviour
         _bgmSlider = transform.Find("BgmSlider").GetComponent<Slider>();
 
         playerInput.OnSettingEvent += HandheldSettingUI;
+        DataManager.Instance.OnComplete += SetSliderValue;
     }
 
     private void Start()
     {
         CloseSettingUI(false);
-        SetSliderValue();
     }
 
-    private void OnApplicationQuit()
-    {
-        SaveVolumeValue();
-    }
+    // private void OnApplicationQuit()
+    // {
+    //     SaveVolumeValue();
+    // }
     
     
     private void OnDestroy()
@@ -98,10 +98,8 @@ public class SettingUI : MonoBehaviour
         OnActiveChanged?.Invoke(_isActive);
     }
 
-    public void SetSliderValue()
+    public void SetSliderValue(StageData data)
     {
-        var data = DataManager.Instance.LoadData(true);
-
         _masterSlider.value = data.MasterVolume;
         _sfxSlider.value = data.SFXVolume;
         _bgmSlider.value = data.BGMVolume;

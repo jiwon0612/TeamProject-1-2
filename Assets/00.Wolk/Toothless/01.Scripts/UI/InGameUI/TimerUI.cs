@@ -20,27 +20,30 @@ public struct TimeStruct
 
 public class TimerUI : MonoBehaviour
 {
-
-
     [Header("TimerSetting")] [SerializeField]
     private bool isTutorial; 
     
     private TextMeshProUGUI timerText;
-    private TextMeshProUGUI maxTimerText;
     
     private float _min;
     private float _sic;
     private float _mSic;
-    
 
     private void Awake()
     {
         timerText = transform.Find("TimerInfo").GetComponent<TextMeshProUGUI>();
-        maxTimerText = transform.Find("MaxTimeInfo").GetComponent<TextMeshProUGUI>();
+    }
+
+    private void Start()
+    {
+        if (isTutorial)
+            gameObject.SetActive(false);
     }
 
     private void Update()
     {
+        if (isTutorial) return;
+        
         _mSic += Time.deltaTime;
         if (_mSic > 1f)
         {
@@ -52,7 +55,6 @@ public class TimerUI : MonoBehaviour
             _mSic = 0;
             _min += 1f;
         }
-        
         timerText.text = $"{_min}:{_sic}:{Mathf.Round(_mSic * 100f)}";
     }
 
@@ -61,15 +63,5 @@ public class TimerUI : MonoBehaviour
         _min = 0;
         _sic = 0;
         _mSic = 0;
-    }
-
-    public void LoadMinTime()
-    {
-        //TimeStruct timeStruct = 
-    }
-
-    public void SaveMinTime()
-    {
-        
     }
 }

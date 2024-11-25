@@ -11,14 +11,13 @@ public class StageManager : MonoBehaviour
     [SerializeField] private GameObject _stage4;
     [SerializeField] private GameObject _stage5;
 
-    private void Start()
+    private void Awake()
     {
-        DataManager.Instance.Initialized(() => SetStage());
+        DataManager.Instance.OnComplete += SetStage;
     }
 
-    public void SetStage()
+    public void SetStage(StageData data)
     {
-        var data = DataManager.Instance.LoadData(true);
         
         _stage1.SetActive(data.Stage1);
         _stage2.SetActive(data.Stage2);
