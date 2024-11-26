@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoSingleton<GameManager>
@@ -15,12 +16,15 @@ public class GameManager : MonoSingleton<GameManager>
     [SerializeField] private LayerMask whatIsTarget;
     [SerializeField] private Transform zoonPoint;
     [SerializeField] private Transform point;
+
+    public UnityEvent OnGameBGM;
     
     [Space]
     public Player player;
     
     private void Start()
     {
+        OnGameBGM?.Invoke();
         SetCurser(!isLockCursor);
         SetRope(_isCanRope);
     }
