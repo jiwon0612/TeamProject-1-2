@@ -49,39 +49,39 @@ public class Katana : MonoBehaviour, IPlayerComponent
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        LayerMask colisionMask = 1 << collision.gameObject.layer;
-        if ((_whatIsTarget & colisionMask) != 0)
-        {
-            if (_fi == false && _animaTrigger.OnAnimationPlaying.Value)
-            {
-                _fi = true;
-
-                OnHitEvent?.Invoke();
-
-                ContactPoint point = collision.contacts[0];
-                Vector3 hitPoint = point.point;
-
-                Vector3 normal = (_normalPoint.position - transform.position);
-
-                //GameObject[] objects = ObjectCut.Slicer(collision.gameObject,normal, hitPoint, _sliceMaterial);
-                GameObject[] objects = MeshCut.Cut(collision.gameObject, hitPoint, normal, _sliceMaterial);
-
-                objects[1].transform.position = objects[0].transform.position;
-                objects[1].transform.rotation = objects[0].transform.rotation;
-                objects[1].transform.localScale = objects[0].transform.localScale;
-                objects[1].gameObject.layer = objects[0].gameObject.layer;
-
-                objects[1].gameObject.AddComponent<Rigidbody>();
-                var obj = objects[1].gameObject.AddComponent<MeshCollider>();
-                obj.convex = true;
-
-                var obj2 = objects[0].GetComponent<MeshCollider>();
-                obj2.sharedMesh = objects[0].GetComponent<MeshFilter>().mesh;
-            }
-        }
-    }
+    // private void OnCollisionEnter(Collision collision)
+    // {
+    //     LayerMask colisionMask = 1 << collision.gameObject.layer;
+    //     if ((_whatIsTarget & colisionMask) != 0)
+    //     {
+    //         if (_fi == false && _animaTrigger.OnAnimationPlaying.Value)
+    //         {
+    //             _fi = true;
+    //
+    //             OnHitEvent?.Invoke();
+    //
+    //             ContactPoint point = collision.contacts[0];
+    //             Vector3 hitPoint = point.point;
+    //
+    //             Vector3 normal = (_normalPoint.position - transform.position);
+    //
+    //             //GameObject[] objects = ObjectCut.Slicer(collision.gameObject,normal, hitPoint, _sliceMaterial);
+    //             GameObject[] objects = MeshCut.Cut(collision.gameObject, hitPoint, normal, _sliceMaterial);
+    //
+    //             objects[1].transform.position = objects[0].transform.position;
+    //             objects[1].transform.rotation = objects[0].transform.rotation;
+    //             objects[1].transform.localScale = objects[0].transform.localScale;
+    //             objects[1].gameObject.layer = objects[0].gameObject.layer;
+    //
+    //             objects[1].gameObject.AddComponent<Rigidbody>();
+    //             var obj = objects[1].gameObject.AddComponent<MeshCollider>();
+    //             obj.convex = true;
+    //
+    //             var obj2 = objects[0].GetComponent<MeshCollider>();
+    //             obj2.sharedMesh = objects[0].GetComponent<MeshFilter>().mesh;
+    //         }
+    //     }
+    // }
 
     public void StartAttack()
     {

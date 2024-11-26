@@ -33,6 +33,7 @@ public class RopeAction : MonoBehaviour, IPlayerComponent
     private float dashPower;
     [SerializeField] private float dashCoolTime;
 
+    public UnityEvent OnHitEvent;
     public UnityEvent OnShootEvent;
     public UnityEvent OnDeshEvent;
     public UnityEvent<float> OnDashCollTimeEvent;
@@ -116,6 +117,7 @@ public class RopeAction : MonoBehaviour, IPlayerComponent
             _line.SetPosition(0, gunTip.position);
             yield return null;
         }
+        OnHitEvent?.Invoke();
     }
     
     private void StartGrapple(RaycastHit hit)
