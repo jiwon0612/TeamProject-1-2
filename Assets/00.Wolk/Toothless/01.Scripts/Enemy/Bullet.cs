@@ -10,6 +10,7 @@ public class Bullet : MonoBehaviour, IPoolable
 
     public bool IsShooting { get; set; }
     
+    private Vector3 _direction;
     private Rigidbody _rigid;
     private float timer;
     
@@ -27,11 +28,14 @@ public class Bullet : MonoBehaviour, IPoolable
         IsShooting = true;
         timer = 0;  
         transform.rotation = rotation;
-        _rigid.AddForce(dir * force, ForceMode.Impulse);
+        _direction = dir;
     }
     
     private void FixedUpdate()
     {
+        if (IsShooting)
+            _rigid.velocity = _direction * force;
+        
         if (timer >= deadTime)
             Dead();
         

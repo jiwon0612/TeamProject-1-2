@@ -174,7 +174,7 @@ public class Turret : MonoBehaviour, IHitable
         }
     }
 
-    private void OnDrawGizmosSelected()
+    private void OnDrawGizmos()
     {
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(_turretPo.position, turretSearchRange);
