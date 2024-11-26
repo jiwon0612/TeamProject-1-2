@@ -29,6 +29,8 @@ public class TutorialTrigger : MonoBehaviour
     {
         if (((1 << other.gameObject.layer) & _whatIsTarget) != 0)
         {
+            if (IsComplete) return;
+            
             _owner.ShowTutorial(_tutorialText, _duration,this);
         }
     }
