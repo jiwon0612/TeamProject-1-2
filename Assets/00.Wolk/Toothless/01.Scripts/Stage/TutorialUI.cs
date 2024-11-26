@@ -50,9 +50,10 @@ public class TutorialUI : MonoBehaviour
         GameManager.Instance.SetCurser(true);
         
         Time.timeScale = 0;
-        
+        _textMesh.text = "";
+        TutorialTween.Kill();
         TutorialTween = DOTween.To(() => _textMesh.text, x => _textMesh.text = x, text, duration)
-            .OnComplete(() => trigger.IsComplete = true).SetEase(Ease.Linear);
+            .OnComplete(() => trigger.IsComplete = true).SetEase(Ease.Linear).SetUpdate(true);
     }
 
     public void ClickPanel()
@@ -68,6 +69,7 @@ public class TutorialUI : MonoBehaviour
             _canvasGroup.alpha = 0;
             _canvasGroup.interactable = false;
             _canvasGroup.blocksRaycasts = false;
+            GameManager.Instance.SetCurser(false);
             Time.timeScale = 1;
         }
     }
