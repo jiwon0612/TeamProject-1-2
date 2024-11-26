@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.IO;
@@ -23,12 +21,6 @@ public class DataManager : MonoSingleton<DataManager>
     private void Start()
     {
         Initialized();
-    }
-
-    protected override void OnDisable()
-    {
-        base.OnDisable();
-        SaveData();
     }
 
     public void Initialized()
@@ -61,6 +53,7 @@ public class DataManager : MonoSingleton<DataManager>
         {
             string json = JsonUtility.ToJson(StageData);
             Debug.Log(json);
+            File.WriteAllText(_path, string.Empty);
             FileStream fs = File.Open(_path, FileMode.Open);
             StreamWriter sw = new StreamWriter(fs);
             sw.Write(json);

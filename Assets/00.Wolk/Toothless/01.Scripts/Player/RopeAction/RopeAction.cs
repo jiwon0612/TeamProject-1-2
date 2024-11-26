@@ -200,7 +200,7 @@ public class RopeAction : MonoBehaviour, IPlayerComponent
 
             float distanceFromPoint = Vector3.Distance(transform.position, GetGrapplePoint());
 
-            Joint.maxDistance = distanceFromPoint * 0.5f;
+            Joint.maxDistance = distanceFromPoint * 0.525f;
             Joint.minDistance = distanceFromPoint * 0.1f;
         }
     }

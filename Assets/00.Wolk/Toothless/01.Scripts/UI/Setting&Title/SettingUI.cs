@@ -100,6 +100,8 @@ public class SettingUI : MonoBehaviour
 
     public void SetSliderValue(StageData data)
     {
+        Debug.Log(data.ToString());
+        
         _masterSlider.value = data.MasterVolume;
         _sfxSlider.value = data.SFXVolume;
         _bgmSlider.value = data.BGMVolume;

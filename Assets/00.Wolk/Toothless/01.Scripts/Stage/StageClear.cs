@@ -8,7 +8,7 @@ public class StageClear : MonoBehaviour
 {
     [SerializeField] private LayerMask whatIsTarget;
     [SerializeField] private StageData setData;
-    [SerializeField] private int number;
+    [SerializeField] private int number = 1;
 
     private void OnCollisionEnter(Collision other)
     {
@@ -24,6 +24,8 @@ public class StageClear : MonoBehaviour
                 DataManager.Instance.StageData.Stage4 = true;
             if (setData.Stage5)
                 DataManager.Instance.StageData.Stage5 = true;
+            
+            DataManager.Instance.SaveData();
             
             SceneManager.LoadScene(number);
         }

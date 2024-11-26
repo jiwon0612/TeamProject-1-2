@@ -778,9 +778,9 @@ MonoBehaviour:
   dashTime: 1
   shakeForce: 1
   shakeDuration: 0.25
-  fOV: 0
-  setSpeedValue: 0
-  startFOV: 0
+  fOV: 80
+  setSpeedValue: 60
+  startFOV: 30
 --- !u!114 &1690285843487580419
 MonoBehaviour:
   m_ObjectHideFlags: 0
