@@ -35,7 +35,6 @@ public class TutorialUI : MonoBehaviour
 
         for (int i = 0; i < textAndTriggers.Count; i++)
         {
-            Debug.Log(i);
             textAndTriggers[i].trigger.Initialized(this,textAndTriggers[i].text, textAndTriggers[i].duration,whatIsTarget);
         }
     }

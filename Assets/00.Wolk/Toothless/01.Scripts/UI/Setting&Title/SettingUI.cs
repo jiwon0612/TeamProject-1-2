@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using System;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -100,11 +97,15 @@ public class SettingUI : MonoBehaviour
 
     public void SetSliderValue(StageData data)
     {
-        Debug.Log(data.ToString());
-        
         _masterSlider.value = data.MasterVolume;
         _sfxSlider.value = data.SFXVolume;
         _bgmSlider.value = data.BGMVolume;
+        
+        if (AudioManager.Instance == null) return;
+        
+        AudioManager.Instance.SetMasterVolume(data.MasterVolume);
+        AudioManager.Instance.SetSFXVolume(data.SFXVolume);
+        AudioManager.Instance.SetBGMVolume(data.BGMVolume);
     }
 
     public void ClickReturnBtn(int number)

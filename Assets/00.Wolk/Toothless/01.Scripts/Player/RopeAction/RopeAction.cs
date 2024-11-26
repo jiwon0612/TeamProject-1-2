@@ -33,6 +33,7 @@ public class RopeAction : MonoBehaviour, IPlayerComponent
     private float dashPower;
     [SerializeField] private float dashCoolTime;
 
+    public UnityEvent OnShootEvent;
     public UnityEvent OnDeshEvent;
     public UnityEvent<float> OnDashCollTimeEvent;
 
@@ -77,10 +78,10 @@ public class RopeAction : MonoBehaviour, IPlayerComponent
     private void TryToShootGrapple()
     {
         RaycastHit hit;
+        OnShootEvent?.Invoke();
         if (Physics.Raycast(_cam.position, _cam.forward, out hit, _maxDistance, whatIsWall))
         {
             _animationCoroutine = StartCoroutine(RopeAnimation(hit.point, () => StartGrapple(hit)));
-            
         }
         else
         {
