@@ -14,6 +14,8 @@ public class InputReader : ScriptableObject, Console.IPlayerActions, IPlayerComp
     public event Action<bool> OnShootEvent;
     public event Action OnAttackEvent;
     public event Action OnDeshEvent;
+    
+    public event Action OnSettingEvent;
 
     private void OnEnable()
     {
@@ -29,6 +31,12 @@ public class InputReader : ScriptableObject, Console.IPlayerActions, IPlayerComp
     public void Initialize(Player player)
     {
         _player = player;
+    }
+
+    public void SetEnable(bool enable)
+    {
+        if (enable) _console.Enable();
+        else if (!enable) _console.Disable();
     }
 
     public void OnMove(InputAction.CallbackContext context)
@@ -66,5 +74,11 @@ public class InputReader : ScriptableObject, Console.IPlayerActions, IPlayerComp
     {
         if (context.performed)
             OnDeshEvent?.Invoke();
+    }
+
+    public void OnSetting(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+            OnSettingEvent?.Invoke();
     }
 }

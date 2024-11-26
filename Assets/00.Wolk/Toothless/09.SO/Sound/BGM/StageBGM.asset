@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ac4188f9fe59a84c9644d1d7807607d, type: 3}
+  m_Name: StageBGM
+  m_EditorClassIdentifier: 
+  audioType: 1
+  clip: {fileID: 8300000, guid: 0ab54af5c95a32d4198da8ca3a2e54c6, type: 3}
+  loop: 1
+  randomPitch: 0
+  randomPitchModifier: 0.1
+  volume: 1
+  basePitch: 1

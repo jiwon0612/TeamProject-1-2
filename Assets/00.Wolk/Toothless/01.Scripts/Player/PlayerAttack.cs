@@ -1,7 +1,10 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PlayerAttack : MonoBehaviour, IPlayerComponent
 {
+    public UnityEvent OnAttackEvent;
+    
     private Animator _animator;
     
     private Player _player;
@@ -33,5 +36,10 @@ public class PlayerAttack : MonoBehaviour, IPlayerComponent
     public void Attack()
     {
         _katana.StartAttack();
+    }
+
+    public void StartAttack()
+    {
+        OnAttackEvent?.Invoke();
     }
 }

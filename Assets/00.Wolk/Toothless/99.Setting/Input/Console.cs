@@ -80,6 +80,15 @@ public partial class @Console: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Setting"",
+                    ""type"": ""Button"",
+                    ""id"": ""ee522fe2-fdaa-41a2-910e-2227eb9e2e61"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -192,6 +201,17 @@ public partial class @Console: IInputActionCollection2, IDisposable
                     ""action"": ""Desh"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bb79e650-3bec-4fb5-b3d3-93d9ab96dd5f"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Setting"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -206,6 +226,7 @@ public partial class @Console: IInputActionCollection2, IDisposable
         m_Player_Shoot = m_Player.FindAction("Shoot", throwIfNotFound: true);
         m_Player_Attack = m_Player.FindAction("Attack", throwIfNotFound: true);
         m_Player_Desh = m_Player.FindAction("Desh", throwIfNotFound: true);
+        m_Player_Setting = m_Player.FindAction("Setting", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -273,6 +294,7 @@ public partial class @Console: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Shoot;
     private readonly InputAction m_Player_Attack;
     private readonly InputAction m_Player_Desh;
+    private readonly InputAction m_Player_Setting;
     public struct PlayerActions
     {
         private @Console m_Wrapper;
@@ -283,6 +305,7 @@ public partial class @Console: IInputActionCollection2, IDisposable
         public InputAction @Shoot => m_Wrapper.m_Player_Shoot;
         public InputAction @Attack => m_Wrapper.m_Player_Attack;
         public InputAction @Desh => m_Wrapper.m_Player_Desh;
+        public InputAction @Setting => m_Wrapper.m_Player_Setting;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -310,6 +333,9 @@ public partial class @Console: IInputActionCollection2, IDisposable
             @Desh.started += instance.OnDesh;
             @Desh.performed += instance.OnDesh;
             @Desh.canceled += instance.OnDesh;
+            @Setting.started += instance.OnSetting;
+            @Setting.performed += instance.OnSetting;
+            @Setting.canceled += instance.OnSetting;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -332,6 +358,9 @@ public partial class @Console: IInputActionCollection2, IDisposable
             @Desh.started -= instance.OnDesh;
             @Desh.performed -= instance.OnDesh;
             @Desh.canceled -= instance.OnDesh;
+            @Setting.started -= instance.OnSetting;
+            @Setting.performed -= instance.OnSetting;
+            @Setting.canceled -= instance.OnSetting;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -357,5 +386,6 @@ public partial class @Console: IInputActionCollection2, IDisposable
         void OnShoot(InputAction.CallbackContext context);
         void OnAttack(InputAction.CallbackContext context);
         void OnDesh(InputAction.CallbackContext context);
+        void OnSetting(InputAction.CallbackContext context);
     }
 }

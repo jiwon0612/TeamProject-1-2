@@ -1,5 +1,6 @@
 using BehaviorDesigner.Runtime.Tasks.Unity.UnityCharacterController;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
 
@@ -26,6 +27,8 @@ public class PlayerMovement : MonoBehaviour, IPlayerComponent
 
     private Player _player;
     private RopeAction _rope;
+    
+    public UnityEvent<float> OnSpeedChange;
 
     public void Initialize(Player player)
     {
@@ -39,6 +42,8 @@ public class PlayerMovement : MonoBehaviour, IPlayerComponent
 
     private void FixedUpdate()
     {
+        CurretnSpeed();
+        
         IsGroundChecker();
 
         CheckIsSwhing();
@@ -96,11 +101,15 @@ public class PlayerMovement : MonoBehaviour, IPlayerComponent
 
     public void Dash()
     {
-        if (!isGround.Value && _rope.IsSwhinging)
+        if (_rope.IsSwhinging)
         {
             _rope.RopeDash(transform.forward);
-            Debug.Log(10);
         }
+    }
+
+    public void CurretnSpeed()
+    {
+        OnSpeedChange?.Invoke(RigidCompo.velocity.magnitude);
     }
 
 #if UNITY_EDITOR

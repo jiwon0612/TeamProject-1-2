@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.IO;
@@ -9,6 +7,8 @@ public class DataManager : MonoSingleton<DataManager>
 {
     [SerializeField] private string fileName = "SaveData";
     private string _path;
+    
+    public Action<StageData> OnComplete;
     
     public StageData StageData { get; set; }
     
@@ -22,8 +22,8 @@ public class DataManager : MonoSingleton<DataManager>
     {
         Initialized();
     }
-    
-    private void Initialized(Action OnComplete = null)
+
+    public void Initialized()
     {
         FileInfo fi = new FileInfo(_path);
         if (fi.Exists)
@@ -35,14 +35,16 @@ public class DataManager : MonoSingleton<DataManager>
         {
             StageData = new StageData();
             string jsonString = JsonUtility.ToJson(StageData);
+            Debug.Log(jsonString);
             
             FileStream fs = File.Open(_path, FileMode.OpenOrCreate);
             StreamWriter sw = new StreamWriter(fs);
-            sw.WriteLine(jsonString);
+            sw.Write(jsonString);
             sw.Close();
             Debug.Log("Create data file");
         }
-        OnComplete?.Invoke();
+        OnComplete?.Invoke(StageData);
+        OnComplete = null;
     }
     
     public void SaveData()
@@ -50,10 +52,11 @@ public class DataManager : MonoSingleton<DataManager>
         try
         {
             string json = JsonUtility.ToJson(StageData);
-            
+            Debug.Log(json);
+            File.WriteAllText(_path, string.Empty);
             FileStream fs = File.Open(_path, FileMode.Open);
             StreamWriter sw = new StreamWriter(fs);
-            sw.WriteLine(json);
+            sw.Write(json);
             sw.Close();
         }
         catch (Exception e)
@@ -68,7 +71,7 @@ public class DataManager : MonoSingleton<DataManager>
         {
             FileStream fs = File.Open(_path, FileMode.Open);
             StreamReader sr = new StreamReader(fs);
-            string jsonData = sr.ReadLine();
+            string jsonData = sr.ReadToEnd();
             sr.Close();
             
             StageData data = JsonUtility.FromJson<StageData>(jsonData);
@@ -83,6 +86,7 @@ public class DataManager : MonoSingleton<DataManager>
     }
 }
 
+[Serializable]
 public class StageData
 {
     public bool Stage1 = true;
@@ -90,7 +94,8 @@ public class StageData
     public bool Stage3 = false;
     public bool Stage4 = false;
     public bool Stage5 = false;
-    public bool Stage6 = false;
-    public bool Stage7 = false;
-    public bool Stage8 = false;
+    
+    public float MasterVolume = 0.5f;
+    public float SFXVolume = 0.5f;
+    public float BGMVolume = 0.5f;
 }

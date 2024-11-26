@@ -29,15 +29,21 @@ public class RopeAction : MonoBehaviour, IPlayerComponent
     [SerializeField] private float massScale;
     [SerializeField] private float animationTime;
 
-    [Header("DeshSetting")] [SerializeField]
-    private float deshPower;
+    [Header("DashSetting")] [SerializeField]
+    private float dashPower;
+    [SerializeField] private float dashCoolTime;
 
+    public UnityEvent OnHitEvent;
+    public UnityEvent OnShootEvent;
     public UnityEvent OnDeshEvent;
+    public UnityEvent<float> OnDashCollTimeEvent;
 
     public SpringJoint Joint { get; private set; }
     private Player _player;
     private Rigidbody _rigid;
     private Coroutine _animationCoroutine;
+    private float _dashTimer;
+    private bool _isDashCoolTime;
 
     public bool IsSwhinging { get; private set; }
     public bool IsTryGrapple { get; private set; }
@@ -50,6 +56,7 @@ public class RopeAction : MonoBehaviour, IPlayerComponent
         _cam = Camera.main.transform;
         _rigid = _player.GetComp<PlayerMovement>().RigidCompo;
         IsCanShoot = true;
+        _isDashCoolTime = false;
 
         _player.InputCompo.OnShootEvent += HandleShootEvent;
     }
@@ -64,17 +71,22 @@ public class RopeAction : MonoBehaviour, IPlayerComponent
             StopGrapple();
     }
 
+    private void OnDisable()
+    {
+        _player.InputCompo.OnShootEvent -= HandleShootEvent;
+    }
+
     private void TryToShootGrapple()
     {
         RaycastHit hit;
+        OnShootEvent?.Invoke();
         if (Physics.Raycast(_cam.position, _cam.forward, out hit, _maxDistance, whatIsWall))
         {
             _animationCoroutine = StartCoroutine(RopeAnimation(hit.point, () => StartGrapple(hit)));
-            
         }
         else
         {
-            Vector3 dir = _cam.transform.position + _cam.forward * 15;
+            Vector3 dir = _cam.transform.position + _cam.forward * _maxDistance;
             _animationCoroutine = StartCoroutine(RopeAnimation(dir, () => StopGrapple()));
         }
     }
@@ -105,6 +117,7 @@ public class RopeAction : MonoBehaviour, IPlayerComponent
             _line.SetPosition(0, gunTip.position);
             yield return null;
         }
+        OnHitEvent?.Invoke();
     }
     
     private void StartGrapple(RaycastHit hit)
@@ -118,12 +131,26 @@ public class RopeAction : MonoBehaviour, IPlayerComponent
         float distance = Vector3.Distance(_player.transform.position, _grapplePoint);
 
         Joint.maxDistance = distance * 0.8f;
-        Joint.minDistance = distance * 0.25f;
+        Joint.minDistance = distance * 0.15f;
 
         Joint.spring = spring;
         Joint.damper = damper;
         Joint.massScale = massScale;
 
+    }
+
+    private void Update()
+    {
+        if (_isDashCoolTime)
+        {
+            _dashTimer += Time.deltaTime;
+            OnDashCollTimeEvent?.Invoke(_dashTimer / dashCoolTime);
+            if (_dashTimer >= dashCoolTime)
+            {
+                _isDashCoolTime = false;
+                _dashTimer = 0f;
+            }
+        }
     }
 
     private void FixedUpdate()
@@ -147,7 +174,8 @@ public class RopeAction : MonoBehaviour, IPlayerComponent
 
     private void StopGrapple()
     {
-        StopCoroutine(_animationCoroutine);
+        if (_animationCoroutine != null)
+            StopCoroutine(_animationCoroutine);
         IsSwhinging = false;
         _line.positionCount = 0;
         Destroy(Joint);
@@ -166,29 +194,26 @@ public class RopeAction : MonoBehaviour, IPlayerComponent
         if (input.x < 0) _rigid.AddForce(-_player.transform.right * horizontalForce * Time.deltaTime);
 
         if (input.y > 0) _rigid.AddForce(_player.transform.forward * forwardForce * Time.deltaTime);
-        if (input.y < 0)
-        {
-            float extendedDistance = Vector3.Distance(transform.position, GetGrapplePoint()) + extendCableSpeed;
-
-            Joint.maxDistance = extendedDistance * 1.2f;
-            Joint.minDistance = extendedDistance * 0.85f;
-        }
+        if (input.y < 0) _rigid.AddForce(-_player.transform.forward * forwardForce * Time.deltaTime);
 
         if (Keyboard.current.spaceKey.isPressed)
         {
             Vector3 directionPoint = GetGrapplePoint() - transform.position;
-            _rigid.AddForce(directionPoint.normalized * extendCableSpeed);
+            _rigid.AddForce(directionPoint.normalized * extendCableSpeed * Time.deltaTime);
 
             float distanceFromPoint = Vector3.Distance(transform.position, GetGrapplePoint());
 
-            Joint.maxDistance = distanceFromPoint * 0.75f;
-            Joint.minDistance = distanceFromPoint * 0.25f;
+            Joint.maxDistance = distanceFromPoint * 0.525f;
+            Joint.minDistance = distanceFromPoint * 0.1f;
         }
     }
 
     public void RopeDash(Vector3 dir)
     {
-        _rigid.AddForce(new Vector3(dir.x, 0, dir.z) * deshPower, ForceMode.Impulse);
+        if (_isDashCoolTime) return;
+        
+        _isDashCoolTime = true;
+        _rigid.AddForce(new Vector3(dir.x, 0, dir.z) * dashPower, ForceMode.Impulse);
         OnDeshEvent?.Invoke();
     }
 }
