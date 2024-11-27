@@ -1,4 +1,3 @@
-using BehaviorDesigner.Runtime.Tasks.Unity.UnityCharacterController;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;

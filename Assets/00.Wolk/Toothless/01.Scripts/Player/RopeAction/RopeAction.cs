@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using BehaviorDesigner.Runtime.Tasks.Unity.UnityCharacterController;
 using UnityEngine;
 using Unity.VisualScripting;
 using UnityEngine.Events;

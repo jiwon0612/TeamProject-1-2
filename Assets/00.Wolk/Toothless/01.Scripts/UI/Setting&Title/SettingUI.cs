@@ -35,12 +35,13 @@ public class SettingUI : MonoBehaviour
 
         playerInput.OnSettingEvent += HandheldSettingUI;
         DataManager.Instance.OnComplete += SetSliderValue;
+        DataManager.Instance.OnComplete += LoadDPIValue;
     }
 
     private void Start()
     {
         CloseSettingUI(false);
-        LoadDPIValue();
+        
     }
 
     // private void OnApplicationQuit()
@@ -162,7 +163,7 @@ public class SettingUI : MonoBehaviour
         DataManager.Instance.SaveData();
     }
 
-    private void LoadDPIValue()
+    private void LoadDPIValue(StageData data)
     {
         _beforeDPI = DataManager.Instance.LoadData().DPIValue;
         _dpiInput.text = _beforeDPI.ToString();

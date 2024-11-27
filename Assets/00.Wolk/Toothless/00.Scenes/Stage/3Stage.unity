@@ -717,6 +717,18 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 69eeadbe5a6c72240b2148602752cb7d, type: 3}
+--- !u!114 &153183465 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3049991101365327696, guid: 69eeadbe5a6c72240b2148602752cb7d,
+    type: 3}
+  m_PrefabInstance: {fileID: 153183464}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01b04ff17ccd20e4fa55395019332ddb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &158765945
 GameObject:
   m_ObjectHideFlags: 0
@@ -4713,6 +4725,36 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 153500439540900311, guid: 072b6a330c27fa34f907d062a0213a03,
+        type: 3}
+      propertyPath: OnHitEvent.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 153500439540900311, guid: 072b6a330c27fa34f907d062a0213a03,
+        type: 3}
+      propertyPath: OnHitEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 153183465}
+    - target: {fileID: 153500439540900311, guid: 072b6a330c27fa34f907d062a0213a03,
+        type: 3}
+      propertyPath: OnHitEvent.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 153500439540900311, guid: 072b6a330c27fa34f907d062a0213a03,
+        type: 3}
+      propertyPath: OnHitEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SetHP
+      objectReference: {fileID: 0}
+    - target: {fileID: 153500439540900311, guid: 072b6a330c27fa34f907d062a0213a03,
+        type: 3}
+      propertyPath: OnHitEvent.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: HPUI, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 153500439540900311, guid: 072b6a330c27fa34f907d062a0213a03,
+        type: 3}
+      propertyPath: OnHitEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 962931806341463772, guid: 072b6a330c27fa34f907d062a0213a03,
         type: 3}
       propertyPath: volume
