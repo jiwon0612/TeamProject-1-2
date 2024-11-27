@@ -18,11 +18,6 @@ public class PlayerLook : MonoBehaviour, IPlayerComponent
         _cam = Camera.main; 
     }
 
-    public void SetDPI()
-    {
-        seneitivity = DataManager.Instance.StageData.DPIValue;
-    }
-    
     public void SetPlayerLook(Vector2 input)
     {
         float mouseX = input.x;

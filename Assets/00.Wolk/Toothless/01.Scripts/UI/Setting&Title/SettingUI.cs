@@ -35,7 +35,6 @@ public class SettingUI : MonoBehaviour
 
         playerInput.OnSettingEvent += HandheldSettingUI;
         DataManager.Instance.OnComplete += SetSliderValue;
-        DataManager.Instance.OnComplete += LoadDPIValue;
     }
 
     private void Start()
@@ -102,7 +101,6 @@ public class SettingUI : MonoBehaviour
         if (isSave)
         {
             SaveVolumeValue();
-            SaveDPIValue();
         }
 
         OnActiveChanged?.Invoke(_isActive);
@@ -139,34 +137,5 @@ public class SettingUI : MonoBehaviour
         DataManager.Instance.StageData.BGMVolume = _bgmSlider.value;
         
         DataManager.Instance.SaveData();
-    }
-
-    public void GetDPIValue(string dpi)
-    {
-        if (!string.IsNullOrEmpty(dpi))
-        {
-            _beforeDPI = float.Parse(dpi);
-            SaveDPIValue();
-            OnDPIChanged?.Invoke();
-        }
-        else
-        {
-            _dpiInput.text = _beforeDPI.ToString();
-        }
-        
-    }
-
-    public void SaveDPIValue()
-    {
-        DataManager.Instance.StageData.DPIValue = _beforeDPI;
-        
-        DataManager.Instance.SaveData();
-    }
-
-    private void LoadDPIValue(StageData data)
-    {
-        _beforeDPI = DataManager.Instance.LoadData().DPIValue;
-        _dpiInput.text = _beforeDPI.ToString();
-        OnDPIChanged?.Invoke();
     }
 }

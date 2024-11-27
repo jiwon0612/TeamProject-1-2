@@ -94,10 +94,9 @@ public class StageData
     public bool Stage3 = false;
     public bool Stage4 = false;
     public bool Stage5 = false;
+    public bool Stage6 = false;
     
     public float MasterVolume = 0.5f;
     public float SFXVolume = 0.5f;
     public float BGMVolume = 0.5f;
-
-    public float DPIValue = 30;
 }
