@@ -146,7 +146,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4eb86d1f2e100e4b803ac235eb6d3b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  force: 40
+  force: 80
   deadTime: 2
   poolName: Bullet
   damage: 1

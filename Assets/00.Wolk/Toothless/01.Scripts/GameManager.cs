@@ -16,6 +16,7 @@ public class GameManager : MonoSingleton<GameManager>
     [SerializeField] private LayerMask whatIsTarget;
     [SerializeField] private Transform zoonPoint;
     [SerializeField] private Transform point;
+    [SerializeField] private FadeUI fadeUI;
 
     public UnityEvent OnGameBGM;
     
@@ -48,8 +49,13 @@ public class GameManager : MonoSingleton<GameManager>
 
         if (col.Length > 0)
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            SetScene(SceneManager.GetActiveScene());
         }
+    }
+
+    public void SetScene(Scene scene)
+    {
+        fadeUI.FadeOut(() => SceneManager.LoadScene(scene.name));
     }
 
     private void OnDrawGizmos()

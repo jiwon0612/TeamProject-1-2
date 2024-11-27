@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class PlayerHealth : MonoBehaviour
 {
@@ -33,6 +34,7 @@ public class PlayerHealth : MonoBehaviour
     public void Death()
     {
         IsCanHit = false;
+        GameManager.Instance.SetScene(SceneManager.GetActiveScene());
         OnDeathEvent.Invoke();
     }
 }
