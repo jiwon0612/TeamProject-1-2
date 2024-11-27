@@ -16,22 +16,17 @@ public class SettingUI : MonoBehaviour
     private Slider _sfxSlider;
     private Slider _bgmSlider;
 
-    private TMP_InputField _dpiInput;
-
     private bool _isActive;
     private float _beforeDPI = 30;
 
     public UnityEvent<bool> OnActiveChanged;
     
-    public UnityEvent OnDPIChanged;
-
     private void Awake()
     {
         _canvasGroup = GetComponent<CanvasGroup>();
         _masterSlider = transform.Find("MasterVolumeSlider").GetComponent<Slider>();
         _sfxSlider = transform.Find("EffectSoundSlider").GetComponent<Slider>();
         _bgmSlider = transform.Find("BgmSlider").GetComponent<Slider>();
-        _dpiInput = transform.Find("DPIInput").GetComponent<TMP_InputField>();
 
         playerInput.OnSettingEvent += HandheldSettingUI;
         DataManager.Instance.OnComplete += SetSliderValue;
