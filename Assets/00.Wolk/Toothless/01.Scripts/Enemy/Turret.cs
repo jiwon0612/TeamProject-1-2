@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using BehaviorDesigner.Runtime.Tasks.Unity.UnityPhysics2D;
 using DG.Tweening;
 using UnityEngine.Events;
 
@@ -115,7 +114,7 @@ public class Turret : MonoBehaviour, IHitable
 
     private bool DetectSometing(out RaycastHit point)
     {
-        Vector3 dir = GameManager.Instance.player.transform.position - _turretPo.position;
+        Vector3 dir = GameManager.Instance.player.transform.position - _turretPo.position ;
         bool isHit = Physics.Raycast(_turretPo.position, dir.normalized, out point, turretSearchRange);
 
         if (!isHit)
@@ -133,7 +132,7 @@ public class Turret : MonoBehaviour, IHitable
 
     private void LookPlayer()
     {
-        Vector3 point = GameManager.Instance.player.transform.position + new Vector3(0, -0.7f, 0);
+        Vector3 point = GameManager.Instance.player.transform.position + new Vector3(0, -1f, 0);
         Vector3 dir = (point - transform.position).normalized;
 
         Quaternion lookDirQuaternion = Quaternion.LookRotation(dir);

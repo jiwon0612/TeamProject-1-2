@@ -52,7 +52,7 @@ public class TimerUI : MonoBehaviour
         }
         if (_sic > 60f)
         {
-            _mSic = 0;
+            _sic = 0;
             _min += 1f;
         }
         timerText.text = $"{_min}:{_sic}:{Mathf.Round(_mSic * 100f)}";

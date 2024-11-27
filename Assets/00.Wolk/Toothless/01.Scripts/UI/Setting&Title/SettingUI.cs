@@ -1,3 +1,5 @@
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -15,9 +17,10 @@ public class SettingUI : MonoBehaviour
     private Slider _bgmSlider;
 
     private bool _isActive;
+    private float _beforeDPI = 30;
 
     public UnityEvent<bool> OnActiveChanged;
-
+    
     private void Awake()
     {
         _canvasGroup = GetComponent<CanvasGroup>();
@@ -32,6 +35,7 @@ public class SettingUI : MonoBehaviour
     private void Start()
     {
         CloseSettingUI(false);
+        
     }
 
     // private void OnApplicationQuit()
@@ -90,7 +94,9 @@ public class SettingUI : MonoBehaviour
         _canvasGroup.blocksRaycasts = false;
         _isActive = false;
         if (isSave)
+        {
             SaveVolumeValue();
+        }
 
         OnActiveChanged?.Invoke(_isActive);
     }
