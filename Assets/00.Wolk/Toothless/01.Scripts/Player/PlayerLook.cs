@@ -3,8 +3,7 @@ using UnityEngine;
 public class PlayerLook : MonoBehaviour, IPlayerComponent
 {
     [Header("Setting")] 
-    [SerializeField] private float xSeneitivity = 30f;
-    [SerializeField] private float ySeneitivity = 30f;
+    [SerializeField] private float seneitivity = 30f;
     
     public bool IsCantLook {get; set;}
     
@@ -18,17 +17,22 @@ public class PlayerLook : MonoBehaviour, IPlayerComponent
         _player = player;
         _cam = Camera.main; 
     }
+
+    public void SetDPI()
+    {
+        seneitivity = DataManager.Instance.StageData.DPIValue;
+    }
     
     public void SetPlayerLook(Vector2 input)
     {
         float mouseX = input.x;
         float mouseY = input.y;
         
-        xRotation -= (mouseY * Time.deltaTime) * ySeneitivity;
+        xRotation -= (mouseY * Time.deltaTime) * seneitivity;
         xRotation = Mathf.Clamp(xRotation, -80f,  80f);
         
         _cam.transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
-        transform.Rotate(Vector3.up * (mouseX * Time.deltaTime) * xSeneitivity);
+        transform.Rotate(Vector3.up * (mouseX * Time.deltaTime) * seneitivity);
     }
 
     private void LateUpdate()

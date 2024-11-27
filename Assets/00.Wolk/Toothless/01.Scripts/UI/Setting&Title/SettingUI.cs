@@ -1,3 +1,5 @@
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -14,9 +16,14 @@ public class SettingUI : MonoBehaviour
     private Slider _sfxSlider;
     private Slider _bgmSlider;
 
+    private TMP_InputField _dpiInput;
+
     private bool _isActive;
+    private float _beforeDPI = 30;
 
     public UnityEvent<bool> OnActiveChanged;
+    
+    public UnityEvent OnDPIChanged;
 
     private void Awake()
     {
@@ -24,6 +31,7 @@ public class SettingUI : MonoBehaviour
         _masterSlider = transform.Find("MasterVolumeSlider").GetComponent<Slider>();
         _sfxSlider = transform.Find("EffectSoundSlider").GetComponent<Slider>();
         _bgmSlider = transform.Find("BgmSlider").GetComponent<Slider>();
+        _dpiInput = transform.Find("DPIInput").GetComponent<TMP_InputField>();
 
         playerInput.OnSettingEvent += HandheldSettingUI;
         DataManager.Instance.OnComplete += SetSliderValue;
@@ -32,6 +40,7 @@ public class SettingUI : MonoBehaviour
     private void Start()
     {
         CloseSettingUI(false);
+        LoadDPIValue();
     }
 
     // private void OnApplicationQuit()
@@ -90,7 +99,10 @@ public class SettingUI : MonoBehaviour
         _canvasGroup.blocksRaycasts = false;
         _isActive = false;
         if (isSave)
+        {
             SaveVolumeValue();
+            SaveDPIValue();
+        }
 
         OnActiveChanged?.Invoke(_isActive);
     }
@@ -126,5 +138,34 @@ public class SettingUI : MonoBehaviour
         DataManager.Instance.StageData.BGMVolume = _bgmSlider.value;
         
         DataManager.Instance.SaveData();
+    }
+
+    public void GetDPIValue(string dpi)
+    {
+        if (!string.IsNullOrEmpty(dpi))
+        {
+            _beforeDPI = float.Parse(dpi);
+            SaveDPIValue();
+            OnDPIChanged?.Invoke();
+        }
+        else
+        {
+            _dpiInput.text = _beforeDPI.ToString();
+        }
+        
+    }
+
+    public void SaveDPIValue()
+    {
+        DataManager.Instance.StageData.DPIValue = _beforeDPI;
+        
+        DataManager.Instance.SaveData();
+    }
+
+    private void LoadDPIValue()
+    {
+        _beforeDPI = DataManager.Instance.LoadData().DPIValue;
+        _dpiInput.text = _beforeDPI.ToString();
+        OnDPIChanged?.Invoke();
     }
 }

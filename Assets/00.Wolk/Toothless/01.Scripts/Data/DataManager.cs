@@ -98,4 +98,6 @@ public class StageData
     public float MasterVolume = 0.5f;
     public float SFXVolume = 0.5f;
     public float BGMVolume = 0.5f;
+
+    public float DPIValue = 30;
 }

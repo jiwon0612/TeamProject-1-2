@@ -3911,6 +3911,7 @@ MonoBehaviour:
     MasterVolume: 0.5
     SFXVolume: 0.5
     BGMVolume: 0.5
+    DPIValue: 30
   number: 1
 --- !u!64 &1287728173
 MeshCollider:
@@ -4206,6 +4207,18 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 072b6a330c27fa34f907d062a0213a03, type: 3}
+--- !u!114 &1482363269 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1338740504608258109, guid: 072b6a330c27fa34f907d062a0213a03,
+    type: 3}
+  m_PrefabInstance: {fileID: 1482363268}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 133885aeace66f64c8164ae5609ebc2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!64 &1490735370
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -4861,6 +4874,41 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6802347716209500392, guid: cbeb04f93e4f9d7419a2a45c4a340583,
+        type: 3}
+      propertyPath: OnDPIChanged.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6802347716209500392, guid: cbeb04f93e4f9d7419a2a45c4a340583,
+        type: 3}
+      propertyPath: OnDPIChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6802347716209500392, guid: cbeb04f93e4f9d7419a2a45c4a340583,
+        type: 3}
+      propertyPath: OnDPIChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1482363269}
+    - target: {fileID: 6802347716209500392, guid: cbeb04f93e4f9d7419a2a45c4a340583,
+        type: 3}
+      propertyPath: OnDPIChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6802347716209500392, guid: cbeb04f93e4f9d7419a2a45c4a340583,
+        type: 3}
+      propertyPath: OnDPIChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SetDPI
+      objectReference: {fileID: 0}
+    - target: {fileID: 6802347716209500392, guid: cbeb04f93e4f9d7419a2a45c4a340583,
+        type: 3}
+      propertyPath: OnDPIChanged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: PlayerLook, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6802347716209500392, guid: cbeb04f93e4f9d7419a2a45c4a340583,
+        type: 3}
+      propertyPath: OnDPIChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 7811214415332951668, guid: cbeb04f93e4f9d7419a2a45c4a340583,
         type: 3}
